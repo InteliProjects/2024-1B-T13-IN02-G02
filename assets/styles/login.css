@@ -1,0 +1,19 @@
+
+body {
+    background-color: #f8f9fa;
+  }
+
+  .login-container {
+    width: 500px;
+    max-width: 500px;
+    margin-top: 50px;
+  }
+
+  .logo {
+    width: 80px;
+  }
+
+  .text-primary {
+    margin-top: 7px;
+    font-size: 16px;
+  }

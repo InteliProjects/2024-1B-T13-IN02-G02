@@ -1,0 +1,306 @@
+<title>
+    <%- title = "Atualizar Manual" %>
+</title>
+<%- include('../components/header.ejs'); %>
+    <link rel="stylesheet" href="/styles/manual-update.css" />
+    <div style="margin-top: 80px; width: 100%; position: relative" class="d-flex">
+        <%- include('../components/sidebar-adm.ejs'); %>
+            <div id="loading" class="spinner-border text-primary" role="status" style="display: none; position: fixed; left: 50%; top: 50%; z-index: 1000;"></div>
+            <div class="conteudo-manual-update w-100" style="padding-inline: 3rem; padding-block: 2rem">
+                <div class="mt-4">
+                    <h1 class="display-5 mb-4">Atualização de Manual</h1>
+                    <!-- Link to Select2 CSS -->
+                    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+                    <!-- jQuery -->
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+                    <!-- Select2 JS -->
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+                    <form id="updateForm">
+                        <div class="mb-3">
+                            <label for="modelId" class="form-label">Modelo: <span class="text-danger">*</span></label
+          >
+          <br />
+          <div class="input-wrapper" style="width: 20%">
+            <input readonly id="modelId" required class="form-control" />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="newName" class="form-label"
+            >Nome atualizado do Manual:
+            <span class="text-danger">*</span></label
+          >
+          <input type="text" id="newName" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+          <label for="newVersion" class="form-label"
+            >Versão atualizada do Manual:
+            <span class="text-danger">*</span></label
+          >
+          <input required type="text" id="newVersion" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+          <label for="ativoDesativado" class="form-label"
+            >Ativo / Desativado <span class="text-danger">*</span></label
+          >
+          <br />
+          <div class="input-group" style="width: 20%">
+            <select
+              id="ativoDesativado"
+              name="active"
+              class="form-select"
+              required
+            >
+              <option value="1">Ativo</option>
+              <option value="0">Desativado</option>
+            </select>
+            <div class="icon">
+              <svg
+                class="icone"
+                xmlns="http://www.w3.org/2000/svg"
+                width="22"
+                height="22"
+                viewBox="0 0 22 22"
+                fill="none"
+              >
+                <path
+                  d="M19.2499 10.3263L11.7287 18.9338V0L10.2712 0V18.9338L2.7499 10.3263L1.6499 11.2887L10.9999 22L20.3362 11.2887L19.2499 10.3263Z"
+                  fill="#0E0E0E"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="newDescription" class="form-label"
+            >Descrição: <span class="text-danger">*</span></label
+          >
+          <textarea
+            id="newDescription"
+            rows="4"
+            class="form-control"
+            required
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Anexar arquivos</label>
+                            <div class="mt-1" style="display: block">
+                                <button type="button" class="btn btn-outline-primary" onclick="document.getElementById('files').click()">
+              <svg
+                width="21"
+                height="21"
+                viewBox="0 0 21 21"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="me-2"
+              >
+                <g clip-path="url(#clip0_4036_664)">
+                  <path
+                    d="M19.5956 10.5V19.6875H1.40438V10.5H0V21H21V10.5H19.5956ZM9.80437 2.86125V16.065H11.2087V2.86125L15.8288 7.95375L16.8656 7.00875L10.5 0L4.1475 7.00875L5.25 7.95375L9.80437 2.86125Z"
+                    fill="#0163B8"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_4036_664">
+                    <rect width="21" height="21" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+              <span>Procurar Arquivos</span>
+            </button>
+                                <input type="file" id="files" name="files[]" multiple style="display: none" onchange="displayFiles()" />
+                                <div id="fileList" style="margin-top: 20px;"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button id="submitButton" type="submit" class="btn btn-primary py-3 mt-5" style="width: 30%">
+            ENVIAR
+          </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </div>
+    </div>
+    </div>
+    <script>
+        const manualId = window.location.pathname.split("/").pop();
+        const modelId = document.getElementById("modelId");
+
+        async function ManualDetails() {
+            try {
+                const response = await fetch(`/api/manual/${manualId}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: localStorage.getItem("access_token"),
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error("Manual não encontrado");
+                }
+                const manual = await response.json();
+
+                const modelResponse = await fetch(`/api/listOneModel/${manual.data.model}`);
+                if (!modelResponse) {
+                    throw new Error("Erro ao listar modelos");
+                }
+
+                disableLoading();
+
+                const model = await modelResponse.json();
+
+                modelId.value = `${model.name}`
+                const newName = document.getElementById('newName').value = `${manual.data.name}`;
+                const newVersion = document.getElementById('newVersion').value = `${manual.data.version}`;
+                const newDescription = document.getElementById('newDescription').value = `${manual.data.description}`;
+
+                const updateForm = document.getElementById('updateForm').addEventListener('submit', async function(event) {
+
+                    event.preventDefault();
+                    activeLoading()
+
+                    const name = document.getElementById('newName').value;
+                    const version = document.getElementById('newVersion').value;
+                    const active = document.getElementById('ativoDesativado').value == 1 ? true : false;
+                    const description = document.getElementById('newDescription').value;
+                    const files = document.getElementById('files').files;
+                    const token = localStorage.getItem("access_token");
+
+                    if (version == newVersion) {
+
+                        const formData = new FormData();
+                        formData.append('name', name);
+                        formData.append('version', version);
+                        formData.append('active', active);
+                        formData.append('description', description);
+                        for (let i = 0; i < files.length; i++) {
+                            formData.append('files', files[i]);
+                        }
+
+                        try {
+                            const response = await fetch(`/api/updateManualDetails/${manualId}`, {
+                                method: 'PUT',
+                                body: formData
+                            });
+
+                            if (response.ok) {
+                                disableLoading();
+                                alert('Manual Atualizado com Sucesso!')
+                                window.location.href = `/engineer/manual/${manualId}`
+                            } else {
+                                disableLoading();
+                                const errorData = await response.json();
+                                alert(errorData.error);
+                            }
+
+                        } catch (error) {
+                            disableLoading();
+                            console.error(error);
+                        }
+                    } else {
+
+                        const formData = new FormData();
+                        formData.append('name', name);
+                        formData.append('description', description);
+                        formData.append('active', active);
+                        formData.append('version', version);
+                        formData.append('model_id', manual.data.model);
+                        for (let i = 0; i < files.length; i++) {
+                            formData.append('files', files[i]);
+                        }
+
+                        try {
+
+                            const responseNewManual = await fetch(`/api/create-manual`, {
+                                method: 'POST',
+                                headers: {
+                                    "Authorization": token
+                                },
+                                body: formData
+                            });
+
+                            const newManual = await responseNewManual.json()
+
+                            if (responseNewManual.ok) {
+                                try {
+                                    const newManualId = newManual.manualId;
+                                    const taskResponse = await fetch(`/api/userIdByTask/${manualId}`);
+                                    const userIds = await taskResponse.json();
+                                    const equipes = userIds.userIds
+                                    const message = `Leia a nova atualização do manual ${manual.data.name}`;
+
+                                    const responseTask = await fetch('/api/create-task', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            "Authorization": token
+                                        },
+                                        body: JSON.stringify({
+                                            equipes: equipes,
+                                            manualId: newManualId,
+                                            message: message,
+                                        }),
+                                    });
+
+                                    if (!responseTask.ok) {
+                                        const errorDetails = await response.json();
+                                        throw new Error(`Erro do servidor: ${errorDetails.message || response.statusText}`);
+                                    }
+
+                                } catch (error) {
+                                    console.error(error);
+                                }
+                                disableLoading();
+                                alert('Um novo manual com a versão atualizada foi criada com sucesso!')
+                                window.location.href = `/engineer/manual/${newManual.manualId}`;
+                            } else {
+                              disableLoading();
+                              alert('Erro ao criar nova versao do manual selecionado. Tente novamente')
+                            }
+
+                        } catch (error) {
+                            disableLoading();
+                            console.error(error);
+                        }
+                    }
+
+                });
+
+            } catch (err) {
+                disableLoading();
+                console.error(err);
+            }
+        }
+
+        function activeLoading() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+        }
+
+        function disableLoading() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'none';
+        }
+
+        function displayFiles() {
+            const files = document.getElementById('files').files;
+            const fileList = document.getElementById('fileList'); // Mantenha a referência ao elemento
+
+            fileList.innerHTML = ''; // Limpa o conteúdo da div
+
+            for (let i = 0; i < files.length; i++) {
+                fileList.innerHTML += `<p>${files[i].name}<br></p>`;
+            }
+        }
+
+        ManualDetails();
+        activeLoading();
+    </script>

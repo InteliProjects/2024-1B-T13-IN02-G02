@@ -1,0 +1,59 @@
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.form-control {
+    background-color: white;
+    border: 1.5px solid #adadad;
+    width: 100%;
+    height: 45px;
+}
+
+textarea {
+    padding: 10px!important;
+    resize: none;
+}
+
+.icone-editar {
+    position: absolute;
+    right: 2rem;
+    top: 30%;
+}
+
+.input-group {
+    position: relative;
+}
+
+.btn-primary {
+    border-radius: 4px!important;
+    background: #0672CB;
+    transition: all .4s;
+    font-family: "Roboto";
+}
+
+.select2-container--default .select2-selection--multiple {
+    overflow-y: auto;
+}
+
+.select2 {
+    height: 45px;
+    width: 100%!important;
+}
+
+.select2-selection {
+    height: 50px!important;
+}
+
+.select2-selection__arrow {
+    display: none;
+}
+
+.select2-selection__rendered {
+    margin-top: 12px;
+}
+
+.select2-selection__clear {
+    display: none;
+}

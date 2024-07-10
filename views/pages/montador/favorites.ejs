@@ -1,0 +1,135 @@
+<title>
+    <%- title = "Favoritos" %>
+</title>
+<link rel="stylesheet" href="/styles/favorites.css" />
+<%- include('../components/header.ejs'); %>
+    <div style="margin-top: 80px; width: 100%; position: relative;" class="d-flex">
+        <%- include('../components/sidebar.ejs'); %>
+            <div id="loading" class="spinner-border text-primary" role="status" style="display: none; position: fixed; left: 50%; top: 50%"></div>
+            <div class="conteudo-favoritos">
+                <h1>Favoritos</h1>
+                <div class="container-fluid">
+                    <div class="row" id="favoritesContent">
+                        Carregando...
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <script>
+        activeLoading();
+
+        function activeLoading() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+        }
+
+        function disableLoading() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            let token = localStorage.getItem('access_token'); // Obtendo o token da chave correta
+            if (token) {
+
+                fetch('/api/listAllFavorites', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': token,
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        return response.json();
+                    })
+                    .then(data => {
+                        const favorites = document.getElementById('favoritesContent');
+                        favorites.innerHTML = '';
+                        disableLoading()
+
+                        if (!Array.isArray(data)) {
+                            favorites.innerHTML = `<p>${data.message}</p>`;
+                            return;
+                        }
+
+                        if (data.length === 0) {
+                            favorites.innerHTML = '<p>Nenhum manual favorito encontrado.</p>';
+                            return;
+                        }
+
+                        data.forEach(task => {
+                            const manualCard = document.createElement('div');
+                            //manualCard.classList.add('manualCard');
+                            if (task.manual.active) {
+                                manualCard.classList.add('col-md-6');
+                                manualCard.innerHTML = `
+    <div class="manualCard">
+    <div class="title-line">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <g clip-path="url(#clip0_4505_54)">
+          <path d="M29.8 21.48V4.92004H2.2V21.48H0L0.82 27.08H31.18L32 21.48H29.8ZM4.32 7.04004H27.68V21.48H4.32V7.04004ZM29.34 25.04H2.66L2.46 23.7H29.54L29.34 25.04Z" fill="#0E0E0E"/>
+        </g>
+        <defs>
+          <clipPath id="clip0_4505_54">
+            <rect width="32" height="32" fill="white"/>
+          </clipPath>
+        </defs>
+      </svg>
+      <h5>${task.manual.model}: ${task.manual.name}</h5>
+    </div>
+    <div>
+      <div class="lines">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <g clip-path="url(#clip0_4505_50)">
+            <path d="M16.3375 0L2.3 14.0375L0.225 19.3625L0 20L0.6375 19.775L5.975 17.6875L20 3.6625L16.3375 0ZM2.3375 17.6625L3.4125 14.8875L5.125 16.575L2.3375 17.6625ZM6.0875 15.65L4.325 13.9L14.325 3.9L16.0875 5.6375L6.0875 15.6375V15.65ZM15.3 2.95L16.3375 1.9125L18.0875 3.6625L17.0625 4.6875L15.3 2.95Z" fill="#0E0E0E"/>
+          </g>
+          <defs>
+            <clipPath id="clip0_4505_50">
+              <rect width="20" height="20" fill="white"/>
+            </clipPath>
+          </defs>
+        </svg>
+        <p>Versão: ${task.manual.version}</p>
+      </div>
+      <div class="lines">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <g clip-path="url(#clip0_4505_48)">
+            <path d="M6.7125 8.275H9.2125V9.6H6.7125V8.275ZM10.8125 8.275H13.3125V9.6H10.8125V8.275ZM14.9 8.275H17.4V9.6H14.9V8.275ZM2.625 11.825H5.125V13.15H2.625V11.825ZM6.7125 11.825H9.2125V13.15H6.7125V11.825ZM10.8125 11.825H13.3125V13.15H10.8125V11.825ZM14.9 11.825H17.4V13.15H14.9V11.825ZM2.625 15.3625H5.125V16.7H2.625V15.3625ZM6.7125 15.3625H9.2125V16.7H6.7125V15.3625ZM14.35 1.5125V0H13.0125V1.5125H6.9125V0H5.5875V1.5125H0V20H20V1.5125H14.35ZM5.6 2.8375V4.0125H6.9125V2.8375H13.0125V4.0125H14.35V2.8375H18.6625V5H1.3375V2.8375H5.6ZM1.3375 18.6625V6.3125H18.6625V18.6625H1.3375Z" fill="#0E0E0E"/>
+        </g>
+        <defs>
+          <clipPath id="clip0_4505_48">
+            <rect width="20" height="20" fill="white"/>
+          </clipPath>
+        </defs>
+      </svg>
+      <p>Data de publicação: ${new Date(task.manual.createdAt).toLocaleDateString()}</p>
+    </div>
+  <div class="lines">
+    <a href="/mounter/mounter-manual/${task.manual.id}">
+      Abrir manual
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none">
+        <path d="M9.23625 1.86121L8.44875 2.76121L15.4913 8.90371H0V10.0962H15.4913L8.44875 16.25L9.23625 17.15L18 9.49996L9.23625 1.86121Z" fill="#0672CB"/>
+      </svg>
+    </a>
+  </div>
+</div>
+`;
+                                favorites.appendChild(manualCard);
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        disableLoading()
+                        console.error('Erro ao buscar tarefas:', error);
+                        const favorites = document.getElementById('favoritesContent');
+                        favorites.innerHTML = '<p>Erro ao carregar os manuais favoritos.</p>';
+                    });
+            } else {
+                disableLoading()
+                console.error('Token não encontrado');
+                const favorites = document.getElementById('favoritesContent');
+                favorites.innerHTML = '<p>Token não encontrado. Faça login novamente.</p>';
+            }
+        });
+    </script>

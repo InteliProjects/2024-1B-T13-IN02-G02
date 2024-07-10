@@ -1,0 +1,148 @@
+<title>
+    <%- title = "Distribuição de Tarefas" %>
+</title>
+<%- include('../components/header.ejs'); %>
+    <link rel="stylesheet" href="/styles/task-distribution.css" />
+    <div style="margin-top: 80px; width: 100%; position: relative" class="d-flex">
+        <%- include('../components/sidebar-adm.ejs'); %>
+            <div id="loading" class="spinner-border text-primary" role="status" style="display: none; position: fixed; left: 50%; top: 50%; z-index: 1000;"></div>
+            <div class="" style="padding-inline: 3rem; padding-block: 2rem;">
+                <div class="mt-4">
+                    <h1 class="display-5 mb-4">Cadastro de novas tarefas aos montadores</h1>
+
+                    <!-- Link to Select2 CSS -->
+                    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+                    <!-- jQuery -->
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+                    <!-- Select2 JS -->
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+                    <form onsubmit="creatingTask(event)">
+
+                        <div class="form-group mb-3">
+                            <label for="equipes" class="form-label">Selecione as Equipes ou Montadores <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <select id="equipes" name="equipes[]" class="form-control" multiple="multiple" required>
+                                  <% equipes.forEach(function(equipe) { %>
+                                    <option value="E<%= equipe.id %>"><%= equipe.name %></option>
+                                  <% }); %>
+                                  <% montadores.forEach(function(montador) { %>
+                                    <option value="M<%= montador.id %>"><%= montador.name %></option>
+                                  <% }); %>
+                            </select>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icone-editar" width="20" height="22" viewBox="0 0 20 22" fill="none">
+                              <path d="M18.2504 10.3263L10.7291 18.9338V0L9.27164 0V18.9338L1.75039 10.3263L0.650391 11.2887L10.0004 22L19.3366 11.2887L18.2504 10.3263Z" fill="#0E0E0E"/>
+                            </svg>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group mb-3">
+                            <label for="manuais" class="form-label">Selecione os Manuais <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <select id="manuais" name="manuais" class="form-control" required>
+                                  <% manuais.forEach(function(manual) { %>
+                                    <option value="<%= manual.id %>"><%= manual.name %></option>
+                                  <% }); %>
+          </select>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icone-editar" width="20" height="22" viewBox="0 0 20 22" fill="none">
+            <path d="M18.2504 10.3263L10.7291 18.9338V0L9.27164 0V18.9338L1.75039 10.3263L0.650391 11.2887L10.0004 22L19.3366 11.2887L18.2504 10.3263Z" fill="#0E0E0E"/>
+          </svg>
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Alguma mensagem?<span class="text-danger">*</span></label>
+                            <textarea id="message" name="message" rows="4" class="form-control" required placeholder="Mensagem de notificação para os montadores" style="height: 100px;"></textarea>
+                        </div>
+
+                        <div>
+                            <button type="submit" class="btn btn-primary mt-5 py-3 px-5">ATRIBUIR TAREFAS</button>
+                        </div>
+                    </form>
+
+                    <script>
+                        $(document).ready(function() {
+                            $("#equipes").select2({
+                                placeholder: "Selecione",
+                                allowClear: true,
+                                closeOnSelect: false
+                            });
+                            $("#manuais").select2({
+                                placeholder: "Selecione",
+                                allowClear: true,
+                                closeOnSelect: false
+                            });
+                        });
+                    </script>
+
+
+                    <script>
+                        async function creatingTask(event) {
+                            event.preventDefault();
+                            activeLoading()
+
+                            var equipes = document.getElementById('equipes');
+                            const equipesOptions = equipes.selectedOptions;
+                            var equipes = Array.from(equipesOptions).map(option => option.value);
+
+                            var manuais = document.getElementById('manuais');
+                            const manualId = manuais.value;
+                            var message = document.getElementById("message").value;
+
+                            const token = localStorage.getItem("access_token");
+
+                            try {
+                                const response = await fetch('/api/create-task', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        "Authorization": token
+                                    },
+                                    body: JSON.stringify({
+                                        equipes,
+                                        manualId,
+                                        message
+                                    }),
+                                });
+
+                                if (!response.ok) {
+                                    disableLoading()
+                                    const errorDetails = await response.json();
+                                    throw new Error(`Erro do servidor: ${errorDetails.message || response.statusText}`);
+                                }
+
+                                const result = await response.json();
+                                disableLoading()
+                                alert("Tarefas cadastradas com Sucesso.");
+                                window.location.href = '/engineer/dashboard';
+                            } catch (error) {
+                                disableLoading()
+                                console.error('Erro:', error);
+                                alert('Erro ao criar a tarefa. Detalhes: ' + error.message);
+                            }
+                        }
+
+                        function activeLoading() {
+                            const loading = document.getElementById('loading');
+                            loading.style.display = 'block';
+                        }
+
+                        function disableLoading() {
+                            const loading = document.getElementById('loading');
+                            loading.style.display = 'none';
+                        }
+                    </script>
+                </div>
+            </div>
+    </div>
+
+    <style>
+        .select2-container--default .select2-selection--multiple {
+            overflow-y: auto;
+        }
+    </style>

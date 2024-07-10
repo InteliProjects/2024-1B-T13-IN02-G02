@@ -1,0 +1,235 @@
+<title>
+    <%- title = "Homepage" %>
+</title>
+<link rel="stylesheet" href="/styles/modal-new-notification.css">
+<link rel="stylesheet" href="/styles/homepage.css" />
+<%- include('../components/header.ejs'); %>
+    <div style="margin-top: 80px; width: 100%; position: relative;" class="d-flex">
+        <%- include('../components/sidebar.ejs'); %>
+            <div id="loading" class="spinner-border text-primary" role="status" style="display: none; position: fixed; left: 50%; top: 50%"></div>
+            <div class="conteudo">
+                <h1>Lista de tarefas</h1>
+                <div class="tasks-content">
+                    <div class="left-side side-container">
+                        <h3>Manuais pendentes</h3>
+                        <div id="pending-manuals">
+                            <p>Carregando...</p>
+                        </div>
+                    </div>
+                    <div class="right-side side-container">
+                        <h3>Manuais concluídos</h3>
+                        <div id="completed-manuals">
+                            <p>Carregando...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="new-notification closed-notification" id="modal-notification">
+        <button class="close" onclick="closeModalNotification()">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g clip-path="url(#clip0_4893_554)">
+              <path d="M20 1.025L18.975 0L10 9L1.025 0.0625L0 1.0875L8.9375 10L0.0625 18.9125L1.0875 20L10 11.0625L18.9125 20L19.9375 18.975L11 10L20 1.025Z" fill="#6E6E6E"/>
+          </g>
+          <defs>
+              <clipPath id="clip0_4893_554">
+              <rect width="20" height="20" fill="white"/>
+              </clipPath>
+          </defs>
+          </svg>
+      </button>
+        <div class="top-container">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.5 17.06V14.94H17.06V9.5H14.94V14.94H9.5V17.06H14.94V22.5H17.06V17.06H22.5ZM29.86 29.86H27.74V32H32V27.74H29.86V29.86ZM18 29.86H23.86V32H18V29.86ZM8.18 29.86H14V32H8.18V29.86ZM2.14 27.74H0V32H4.26V29.86H2.14V27.74ZM0 18H2.14V23.86H0V18ZM0 8.18H2.14V14H0V8.18ZM0 4.26H2.14V2.14H4.26V0H0V4.26ZM18 0H23.86V2.14H18V0ZM8.18 0H14V2.14H8.18V0ZM27.74 0V2.14H29.86V4.26H32V0H27.74ZM29.86 8.18H32V14H29.86V8.18ZM29.86 18H32V23.86H29.86V18Z" fill="#0E0E0E"/>
+          </svg>
+            <div>
+                <h5>Nova tarefa</h6>
+                    <h6 id="new-notification-title">Manual de montagem do latitude 3440</h6>
+                    <p id="new-notification-date">07/06/2024 15:40</p>
+            </div>
+        </div>
+        <a href="" id="new-notification-link" class="open-task">Abrir tarefa</a>
+    </div>
+    <script>
+        function openModalNotification() {
+            const modal = document.getElementById('modal-notification');
+            modal.classList.remove('closed-notification');
+            modal.style.display = 'flex';
+        }
+
+        function closeModalNotification() {
+            if (document.getElementById('modal-notification').classList.contains('closed-notification')) return;
+            const modal = document.getElementById('modal-notification');
+            modal.classList.add('closed-notification');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.getElementById('new-notification-title').innerText = "";
+                document.getElementById('new-notification-date').innerText = "";
+            }, 600)
+        }
+    </script>
+    <script>
+        activeLoading();
+
+        function activeLoading() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+        }
+
+        function disableLoading() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'none';
+        }
+
+        let socket
+        window.onload = function() {
+            socket = websocketClient();
+            socket.onmessage = function(event) {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.type === 'new-task') {
+                        openModalNotification();
+                        document.getElementById('new-notification-title').innerText = data.title;
+                        document.querySelector('#new-notification-date').innerText = data.date;
+                        document.querySelector('#new-notification-link').href = data.action_url;
+                        const intervalNotification = setTimeout(() => {
+                            closeModalNotification();
+                        }, 7000);
+                    }
+                } catch (error) {
+                    console.log('Erro ao processar mensagem:', error);
+                }
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            let token = localStorage.getItem('access_token'); // Obtendo o token da chave correta
+            if (token) {
+                fetch('/api/mounter/tasks', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': token,
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            if (response.status === 403) {
+                                throw new Error('Forbidden');
+                            }
+                            throw new Error('Erro na requisição');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const pendingManualsContainer = document.getElementById('pending-manuals');
+                        const completedManualsContainer = document.getElementById('completed-manuals');
+                        pendingManualsContainer.innerHTML = '';
+                        completedManualsContainer.innerHTML = '';
+                        disableLoading()
+
+
+                        if (!Array.isArray(data)) {
+                            console.error('Resposta inesperada da API:', data);
+                            pendingManualsContainer.innerHTML = '<p>Erro ao carregar os manuais pendentes.</p>';
+                            completedManualsContainer.innerHTML = '<p>Erro ao carregar os manuais concluídos.</p>';
+                            return;
+                        }
+
+                        if (data.length === 0) {
+                            pendingManualsContainer.innerHTML = '<p>Nenhum manual pendente encontrado.</p>';
+                            completedManualsContainer.innerHTML = '<p>Nenhum manual concluído encontrado.</p>';
+                            return;
+                        }
+                        data.forEach(task => {
+                            if (task.active) {
+                                const manualCard = document.createElement('div');
+                                manualCard.classList.add('manualCard');
+                                manualCard.innerHTML = `
+            <div class="title-line">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <g clip-path="url(#clip0_4505_54)">
+                  <path d="M29.8 21.48V4.92004H2.2V21.48H0L0.82 27.08H31.18L32 21.48H29.8ZM4.32 7.04004H27.68V21.48H4.32V7.04004ZM29.34 25.04H2.66L2.46 23.7H29.54L29.34 25.04Z" fill="#0E0E0E"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_4505_54">
+                    <rect width="32" height="32" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
+              <h5>${task.model}: ${task.name}</h5>
+            </div>
+            <div>
+              <div class="lines">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <g clip-path="url(#clip0_4505_50)">
+                    <path d="M16.3375 0L2.3 14.0375L0.225 19.3625L0 20L0.6375 19.775L5.975 17.6875L20 3.6625L16.3375 0ZM2.3375 17.6625L3.4125 14.8875L5.125 16.575L2.3375 17.6625ZM6.0875 15.65L4.325 13.9L14.325 3.9L16.0875 5.6375L6.0875 15.6375V15.65ZM15.3 2.95L16.3375 1.9125L18.0875 3.6625L17.0625 4.6875L15.3 2.95Z" fill="#0E0E0E"/>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_4505_50">
+                      <rect width="20" height="20" fill="white"/>
+                    </clipPath>
+                  </defs>
+                </svg>
+                <p>Versão: ${task.version}</p>
+              </div>
+              <div class="lines">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <g clip-path="url(#clip0_4505_48)">
+                    <path d="M6.7125 8.275H9.2125V9.6H6.7125V8.275ZM10.8125 8.275H13.3125V9.6H10.8125V8.275ZM14.9 8.275H17.4V9.6H14.9V8.275ZM2.625 11.825H5.125V13.15H2.625V11.825ZM6.7125 11.825H9.2125V13.15H6.7125V11.825ZM10.8125 11.825H13.3125V13.15H10.8125V11.825ZM14.9 11.825H17.4V13.15H14.9V11.825ZM2.625 15.3625H5.125V16.7H2.625V15.3625ZM6.7125 15.3625H9.2125V16.7H6.7125V15.3625ZM14.35 1.5125V0H13.0125V1.5125H6.9125V0H5.5875V1.5125H0V20H20V1.5125H14.35ZM5.6 2.8375V4.0125H6.9125V2.8375H13.0125V4.0125H14.35V2.8375H18.6625V5H1.3375V2.8375H5.6ZM1.3375 18.6625V6.3125H18.6625V18.6625H1.3375Z" fill="#0E0E0E"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_4505_48">
+                    <rect width="20" height="20" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
+              <p>Data de publicação: ${new Date(task.createdAt).toLocaleDateString()}</p>
+            </div>
+            <div class="lines">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <g clip-path="url(#clip0_4505_52)">
+                  <path d="M18.05 10L19.5125 6.9125L16.5125 5.2625L15.875 1.9125H15.525L12.5 2.35L10 0L7.50005 2.35L4.11255 1.9125L3.48755 5.275L0.487549 6.9125L1.95005 10L0.487549 13.1L3.48755 14.7375L4.12505 18.0875L7.50005 17.65L10 20L12.5 17.65L15.9 18.0875L16.525 14.725L19.525 13.0875L18.05 10ZM15.875 13.5625L15.325 13.8625L15.2 14.475L14.8 16.6L12.0375 16.25L10 18.1625L7.97505 16.25L5.20005 16.6125L4.80005 14.4875L4.68755 13.8625L2.23755 12.5L3.15005 10.55L3.42505 10L3.15005 9.4375L2.22505 7.5L4.72505 6.1625L4.85005 5.55L5.23755 3.425L7.96255 3.75L10 1.8375L12.025 3.75L14.8 3.3875L15.2 5.5125L15.3125 6.1375L17.8125 7.475L16.8875 9.425L16.575 10L17.825 12.5L15.925 13.5375L15.875 13.5625ZM8.75005 11.675L6.47505 9.475L5.55005 10.4375L8.75005 13.5375L14.45 7.8625L13.5125 6.925L8.75005 11.675Z" fill="#0E0E0E"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_4505_52">
+                  <rect width="20" height="20" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+            <p>Status: <span class="${task.readed ? 'concluido' : 'pendente'}">${task.readed ? 'CONCLUÍDO' : 'PENDENTE'}</span></p>
+          </div>
+          <div class="lines">
+            <a href="/mounter/mounter-manual/${task.id}">
+              Abrir manual
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none">
+                <path d="M9.23625 1.86121L8.44875 2.76121L15.4913 8.90371H0V10.0962H15.4913L8.44875 16.25L9.23625 17.15L18 9.49996L9.23625 1.86121Z" fill="#0672CB"/>
+              </svg>
+            </a>
+          </div>
+        `;
+                                if (!task.readed) {
+                                    pendingManualsContainer.appendChild(manualCard);
+                                } else {
+                                    completedManualsContainer.appendChild(manualCard);
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        disableLoading()
+                        console.error('Erro ao buscar tarefas:', error);
+                        const pendingManualsContainer = document.getElementById('pending-manuals');
+                        const completedManualsContainer = document.getElementById('completed-manuals');
+                        pendingManualsContainer.innerHTML = '<p>Nenhum manual pendente encontrado.</p>';
+                        completedManualsContainer.innerHTML = '<p>Nenhum manual concluído encontrado.</p>';
+                    });
+            } else {
+                console.error('Token não encontrado');
+                disableLoading()
+                const pendingManualsContainer = document.getElementById('pending-manuals');
+                const completedManualsContainer = document.getElementById('completed-manuals');
+                pendingManualsContainer.innerHTML = '<p>Token não encontrado. Faça login novamente.</p>';
+                completedManualsContainer.innerHTML = '<p>Token não encontrado. Faça login novamente.</p>';
+            }
+        });
+    </script>

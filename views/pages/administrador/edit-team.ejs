@@ -1,0 +1,139 @@
+<title>
+    <%- title = "Editar Time" %>
+</title>
+<%- include('../components/header.ejs'); %>
+    <link rel="stylesheet" href="/styles/model.css" />
+    <div style="margin-top: 80px; width: 100%; position: relative" class="d-flex">
+        <%- include('../components/sidebar-adm.ejs'); %>
+            <div id="loading" class="spinner-border text-primary" role="status" style="display: none; position: fixed; left: 50%; top: 50%; z-index: 1000;"></div>
+            <div class="" style="padding-inline: 3rem; padding-block: 2rem">
+                <div class="mt-4">
+                    <h1 class="display-5 mb-4">Atualização de Linha de Montagem</h1>
+                    <form onsubmit="updateTeam(event)">
+                        <div class="form-group mb-3">
+                            <label class="form-label">Montador atual: <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="montadorAtual" readonly />
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label">Nova linha de Montagem: <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <select id="linhasDeMontagem" class="form-control" required>
+
+
+
+            </select>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icone-editar" width="20" height="22" viewBox="0 0 20 22" fill="none">
+              <path d="M18.2504 10.3263L10.7291 18.9338V0L9.27164 0V18.9338L1.75039 10.3263L0.650391 11.2887L10.0004 22L19.3366 11.2887L18.2504 10.3263Z" fill="#0E0E0E"/>
+            </svg>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button type="submit" class="btn btn-primary mt-5 py-3 px-5">
+            ATUALIZAR
+          </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </div>
+
+    <script>
+        const userId = window.location.pathname.split('/').pop();
+
+        const montadorAtual = document.getElementById('montadorAtual');
+        const linhasDeMontagem = document.getElementById('linhasDeMontagem');
+        const token = localStorage.getItem("access_token");
+
+        async function listDetails() {
+            try {
+                const response = await fetch(`/api/listById/${userId}`);
+                if (!response) {
+                    throw new Error('Erro ao encontrar perfil');
+                }
+
+                const userDetails = await response.json();
+
+                disableLoading()
+                montadorAtual.value = `${userDetails.name}`;
+
+                async function listTeams() {
+
+                    try {
+
+                        const response = await fetch('/api/listAllTeams');
+                        if (!response) {
+                            console.error('Erro ao listar equipes');
+                        }
+
+                        const teams = await response.json();
+
+                        for (let i = 0; i < teams.length; i++) {
+                            if (teams[i].id == userDetails.team.id) {
+                                linhasDeMontagem.innerHTML += `<option selected value="${teams[i].id}">${teams[i].name}</option>`
+                            } else {
+                                linhasDeMontagem.innerHTML += `<option value="${teams[i].id}">${teams[i].name}</option>`
+                            }
+                        }
+
+
+                    } catch (error) {
+                        console.error(error);
+                    }
+
+                }
+
+                listTeams();
+
+            } catch (error) {
+                disableLoading()
+                console.error(error);
+            }
+        }
+
+        async function updateTeam(event) {
+            event.preventDefault();
+            activeLoading()
+
+            const formData = new FormData();
+            formData.append('userId', userId);
+            formData.append('newTeam', linhasDeMontagem.value);
+
+            try {
+                const response = await fetch('/api/updateTeamId', {
+                    method: 'PATCH',
+                    headers: {
+                        "authorization": token
+                    },
+                    body: formData
+                });
+
+                disableLoading();
+                if (!response.ok) {
+                    alert('Erro ao atualizar linha de montagem');
+                } else {
+                    alert('Time atualizado com sucesso!');
+                    window.location.href = '/engineer/dashboard';
+                }
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        function activeLoading() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+        }
+
+        function disableLoading() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'none';
+        }
+
+        activeLoading()
+        listDetails()
+    </script>

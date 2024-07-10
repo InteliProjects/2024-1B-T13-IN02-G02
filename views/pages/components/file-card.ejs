@@ -1,0 +1,21 @@
+<!-- views/pages/components/file-card.ejs -->
+<div id="fileCard" class="card">
+  <div class="card-body">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="49" viewBox="0 0 48 49" fill="none">
+      <g clip-path="url(#clip0_2165_1058)">
+        <path
+          d="M35.25 0.186523H15L5.04004 9.57652V40.4465H35.25V0.186523ZM15 4.68652V9.18652H10.26L15 4.68652ZM32.16 37.2365H8.25004V12.1865H18V3.39652H31.98L32.16 37.2365ZM38.37 7.92652V11.1365H39.75V44.9765H15.96V43.5365H12.75V48.1865H42.96V7.92652H38.37Z"
+          fill="black"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_2165_1058">
+          <rect width="48" height="48" fill="white" transform="translate(0 0.186523)" />
+        </clipPath>
+      </defs>
+    </svg>
+    <h5 id="fileTitle" class="card-title"><%= file.title %></h5>
+    <p id="fileDescription" class="card-text"><%= file.type %></p>
+    <a id="fileLink" href="<%= file.path %>" class="card-link">Abrir arquivo <i class="fas fa-external-link-alt"></i></a>
+  </div>
+</div>

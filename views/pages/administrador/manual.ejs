@@ -1,0 +1,478 @@
+<title>
+    <%- title = "Manual" %>
+</title>
+<link rel="stylesheet" href="styles/report-error-modal.css" />
+<link rel="stylesheet" href="styles/manual-page.css" />
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+
+<div class="blur-container hidden" id="report-modal">
+    <div class="reporte-container">
+        <button id="report-button-close">
+      <svg
+        width="27"
+        height="27"
+        viewBox="0 0 27 27"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clip-path="url(#clip0_4289_961)">
+          <path
+            d="M27 1.38375L25.6163 0L13.5 12.15L1.38375 0.084375L0 1.46812L12.0656 13.5L0.084375 25.5319L1.46812 27L13.5 14.9344L25.5319 27L26.9156 25.6163L14.85 13.5L27 1.38375Z"
+            fill="black"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_4289_961">
+            <rect width="27" height="27" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+    </button>
+        <h3>Reportes</h3>
+        <table id="listFeedbacks" class="w-100">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody id="listFeedbacksBody">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<%- include('../components/header.ejs'); %>
+    <div style="margin-top: 80px; width: 100%; position: relative" class="d-flex">
+        <%- include('../components/sidebar-adm.ejs'); %>
+            <div id="loading" class="spinner-border text-primary" role="status" style="display: none; position: fixed; left: 50%; top: 50%; z-index: 1000;"></div>
+            <div class="manual-content">
+                <div class="header-manual-content">
+                    <div class="header-text-content">
+                        <div id="adminTitleManual">
+                            <h1 id="manualTitle">Carregando...</h1>
+                            <button id="statusManual">Ativo</button>
+                        </div>
+                        <p id="manualDescription">Carregando...</p>
+                    </div>
+                    <button style="margin-right: 32px" class="button-manual-page" id="report-button-open">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="32"
+          height="32"
+          viewBox="0 0 32 32"
+          fill="none"
+        >
+          <g clip-path="url(#clip0_4289_787)">
+            <path
+              d="M0.580078 0V22.64H12.2401V32L21.4401 22.62H31.4401V0L0.580078 0ZM29.3601 20.54H20.5601L14.3001 26.94V20.54H2.64008V2H29.3601V20.48V20.54ZM9.48008 13.54C10.5851 13.54 11.4801 12.645 11.4801 11.54C11.4801 10.435 10.5851 9.54 9.48008 9.54C8.37508 9.54 7.48008 10.435 7.48008 11.54C7.48008 12.645 8.37508 13.54 9.48008 13.54ZM16.0001 13.54C17.1051 13.54 18.0001 12.645 18.0001 11.54C18.0001 10.435 17.1051 9.54 16.0001 9.54C14.8951 9.54 14.0001 10.435 14.0001 11.54C14.0001 12.645 14.8951 13.54 16.0001 13.54ZM22.5401 13.54C23.6451 13.54 24.5401 12.645 24.5401 11.54C24.5401 10.435 23.6451 9.54 22.5401 9.54C21.4351 9.54 20.5401 10.435 20.5401 11.54C20.5401 12.645 21.4351 13.54 22.5401 13.54Z"
+              fill="black"
+            />
+          </g>
+          <defs>
+            <clipPath id="clip0_4289_787">
+              <rect width="32" height="32" fill="white" />
+            </clipPath>
+          </defs>
+        </svg>
+        <p>Visualizar reportes</p>
+      </button>
+                    <button class="button-manual-page" id="attButton">
+        <svg
+          width="33"
+          height="32"
+          viewBox="0 0 33 32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g clip-path="url(#clip0_2249_705)">
+            <path
+              d="M16.4999 2.52C20.9229 2.527 24.8449 4.666 27.2939 7.964L27.3199 8H21.0599V10.1H31.1599V0H29.0199V6.64C26.1359 2.833 21.6119 0.4 16.5199 0.4C7.89588 0.4 0.902883 7.38 0.879883 15.998V16H3.01988C3.01988 8.555 9.05488 2.52 16.4999 2.52ZM29.9799 16C29.9569 23.428 23.9309 29.44 16.4999 29.44C12.0839 29.44 8.16388 27.316 5.70488 24.035L5.67988 24H11.9399V22H1.93988V32H3.97988V25.36C6.86388 29.167 11.3879 31.6 16.4799 31.6C25.1039 31.6 32.0969 24.62 32.1199 16.002V16H29.9799Z"
+              fill="black"
+            />
+          </g>
+          <defs>
+            <clipPath id="clip0_2249_705">
+              <rect
+                width="32"
+                height="32"
+                fill="white"
+                transform="translate(0.5)"
+              />
+            </clipPath>
+          </defs>
+        </svg>
+        <p>Atualizar Manual</p>
+      </button>
+                </div>
+                <div>
+                    <div class="icon-bar">
+                        <div id="FilterPDF" class="menu-selection active">
+                            <svg width="48" height="49" viewBox="0 0 27 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M16.5467 0.373047H4C1.8 0.373047 0 2.17305 0 4.37305V32.373H26.6667V10.493L16.5467 0.373047ZM17.6889 4.2086L22.4756 9.70638H17.6889V4.2086ZM24.7111 30.5953H1.95556V4.37305C1.95556 3.63971 3.26667 2.15082 4 2.15082L15.7333 2.3286V11.6619H24.7111V30.5953ZM6.62667 17.7064H4V25.7997H5.66667V22.9997H6.62667C8.10667 22.9997 9.30667 21.813 9.30667 20.3464C9.30667 18.8797 8.10667 17.7064 6.62667 17.7064ZM6.62667 21.333H5.68V19.373H6.62667C7.17333 19.373 7.64 19.8264 7.64 20.3464C7.64 20.8664 7.17333 21.3197 6.62667 21.3197V21.333ZM13.3333 17.7997C12.9733 17.7997 12.64 17.7997 12.3333 17.7997H10.6667V25.7997H12.3333C12.64 25.7997 12.9733 25.7997 13.3333 25.7997C14.8133 25.7997 16 24.613 16 23.1597V20.453C16 18.9997 14.8133 17.813 13.3333 17.813V17.7997ZM14.3333 20.4664V23.133C14.3333 23.733 13.8533 24.133 13.3333 24.133C13.1467 24.133 12.76 24.133 12.3333 24.133V19.4664C12.76 19.4664 13.1467 19.4664 13.3333 19.4664C13.8533 19.4664 14.3333 19.8664 14.3333 20.4664ZM19 25.7997H17.3333V17.7064H22.6667V19.373H19V21.333H21.3333V22.9997H19V25.7997Z"
+              fill="black"
+            />
+          </svg>
+                            <p>PDF's</p>
+                        </div>
+                        <div id="FilterVIDEO" class="menu-selection">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="49" viewBox="0 0 48 49" fill="none">
+            <path
+              d="M18.54 38.2865L33.33 28.8665L18.54 19.4465V38.2865ZM21.75 25.2665L27.36 28.8665L21.75 32.4365V25.2665ZM0 5.43652V42.9365H48V5.43652H0ZM44.79 8.64652V14.6465H3.21V8.64652H44.79ZM3.21 39.7265V17.7365H44.79V39.7265H3.21Z"
+              fill="black"
+            />
+          </svg>
+                            <p>Vídeos</p>
+                        </div>
+                        <div id="FilterIMAGE" class="menu-selection">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="49" viewBox="0 0 48 49" fill="none">
+            <g clip-path="url(#clip0_2166_283)">
+              <path
+                d="M0 0.186523V48.1865H48V0.186523H0ZM44.79 44.9765H3.21V3.39652H44.79V44.9765ZM11.43 25.0865H19.8V33.1865H22.59V15.1865H19.8V22.7165H11.43V15.1865H8.64V33.1865H11.43V25.0865ZM31.29 33.1865C31.302 33.1865 31.317 33.1865 31.3305 33.1865C32.874 33.1865 34.3275 32.798 35.5965 32.1125L35.5485 32.1365C36.765 31.427 37.7295 30.404 38.3505 29.177L38.3685 29.1365C38.994 27.9035 39.3615 26.4485 39.3615 24.9065C39.3615 24.833 39.36 24.758 39.3585 24.6845V24.695V23.585C39.3585 23.5595 39.3585 23.5295 39.3585 23.501C39.3585 21.938 38.9925 20.4605 38.343 19.148L38.3685 19.205C37.7295 17.9375 36.765 16.9145 35.5815 16.223L35.5485 16.205C34.398 15.5615 33.0255 15.1835 31.563 15.1835C31.4985 15.1835 31.4325 15.185 31.368 15.1865H26.217V33.1865H31.29ZM29.01 30.8165V17.5565H31.44C31.491 17.555 31.551 17.5535 31.6125 17.5535C33.0495 17.5535 34.3425 18.1655 35.247 19.1435L35.25 19.1465C36.1005 20.267 36.6135 21.686 36.6135 23.2235C36.6135 23.372 36.609 23.519 36.6 23.666L36.6015 23.6465V24.6665C36.6105 24.8 36.6165 24.956 36.6165 25.1135C36.6165 26.678 36.0675 28.1135 35.151 29.2385L35.16 29.2265C34.233 30.2105 32.922 30.824 31.467 30.824C31.374 30.824 31.2795 30.821 31.188 30.8165H31.2015H29.01Z"
+                fill="black"
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_2166_283">
+                <rect
+                  width="48"
+                  height="48"
+                  fill="white"
+                  transform="translate(0 0.186523)"
+                />
+              </clipPath>
+            </defs>
+          </svg>
+                            <p>Imagens</p>
+                        </div>
+                        <div id="Filter3D" class="menu-selection">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="49" height="49" viewBox="0 0 49 49" fill="none">
+            <g clip-path="url(#clip0_2166_285)">
+              <path
+                d="M43.4737 27.7865V4.5365H5.13371V27.7865L0.303711 35.4065V43.8365H48.3037V35.4065L43.4737 27.7865ZM40.2637 7.7465V26.2565H8.34371V7.7465H40.2637ZM7.86371 29.4665H40.8637L43.8637 34.2965H4.80371L7.80371 29.4665H7.86371ZM3.51371 37.5065H18.3037V40.5065H3.51371V37.5065ZM30.5137 40.5065V37.5065H45.1537V40.5065H30.5137Z"
+                fill="black"
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_2166_285">
+                <rect
+                  width="48"
+                  height="48"
+                  fill="white"
+                  transform="translate(0.303711 0.186523)"
+                />
+              </clipPath>
+            </defs>
+          </svg>
+                            <p>Modelos 3D</p>
+                        </div>
+                        <div id="filterOTHERS" class="menu-selection">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="49" viewBox="0 0 48 49" fill="none">
+            <g clip-path="url(#clip0_2166_287)">
+              <path
+                d="M17.82 0.186523L6 11.3765V48.1865H42V0.186523H17.82ZM18 4.38652V11.0765H10.98L18 4.38652ZM38.79 44.9765H9.21V14.2565H21.21V3.39652H38.82V44.9765H38.79Z"
+                fill="black"
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_2166_287">
+                <rect
+                  width="48"
+                  height="48"
+                  fill="white"
+                  transform="translate(0 0.186523)"
+                />
+              </clipPath>
+            </defs>
+          </svg>
+                            <p>Outros</p>
+                        </div>
+                    </div>
+                    <div id="filesContainerPDF" class="card-container" style="display: flex"></div>
+                    <div id="filesContainerVIDEO" class="card-container" style="display: none"></div>
+                    <div id="filesContainerIMAGE" class="card-container" style="display: none"></div>
+                    <div id="filesContainer3D" class="card-container" style="display: none"></div>
+                    <div id="filesContainerOTHERS" class="card-container" style="display: none"></div>
+                </div>
+            </div>
+    </div>
+    <script src="js/report-modal-toggle.js"></script>
+    <script>
+        const manualId = window.location.pathname.split("/").pop(); // Usando a URL da página para pegar o manualId
+        // Puxando do DOM elementos do HTML que vou alterar com o JS
+        const title = document.getElementById("manualTitle");
+        const description = document.getElementById("manualDescription");
+        const filesContainerPDF = document.getElementById("filesContainerPDF");
+        const filesContainerVIDEO = document.getElementById("filesContainerVIDEO");
+        const filesContainerIMAGE = document.getElementById("filesContainerIMAGE");
+        const filesContainer3D = document.getElementById("filesContainer3D");
+        const filesContainerOTHERS = document.getElementById("filesContainerOTHERS");
+        const FilterPDF = document.getElementById("FilterPDF");
+        const FilterVIDEO = document.getElementById("FilterVIDEO");
+        const FilterIMAGE = document.getElementById("FilterIMAGE");
+        const Filter3D = document.getElementById("Filter3D");
+        const filterOTHERS = document.getElementById("filterOTHERS");
+        const buttonManualStatus = document.getElementById("statusManual");
+        const listFeedbacks = document.getElementById('listFeedbacksBody');
+        const buttonFeedback = document.getElementById('report-button-open');
+        const attButton = document.getElementById('attButton')
+
+        function activeLoading() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+        }
+
+        function disableLoading() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'none';
+        }
+
+        // Função para puxar os detalhes do manual (title, description, files) e apresentar eles na página
+        async function manualDetails() {
+            try {
+                const response = await fetch(`/api/manual/${manualId}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        'Authorization': localStorage.getItem("access_token"),
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error("Manual não encontrado");
+                }
+                const manual = await response.json();
+                disableLoading()
+                title.textContent = manual.data.name;
+                description.textContent = manual.data.description;
+
+                if (!manual.data.active) {
+                    buttonManualStatus.textContent = "Desativado";
+                    buttonManualStatus.style.backgroundColor = "#D2D2D2";
+                }
+
+                for (let i = 0; i < manual.data.files.length; i++) {
+                    if (manual.data.files[i].type == "pdf") {
+                        const fileHTML = generateFileCard(manual.data.files[i]);
+                        document.getElementById("filesContainerPDF").innerHTML += fileHTML;
+                    } else if (manual.data.files[i].type == "mp4") {
+                        const fileHTML = generateFileCard(manual.data.files[i]);
+                        document.getElementById("filesContainerVIDEO").innerHTML += fileHTML;
+                    } else if (manual.data.files[i].type == "png" || manual.data.files[i].type == "jpg" || manual.data.files[i].type == "jpeg") {
+                        const fileHTML = generateFileCard(manual.data.files[i]);
+                        document.getElementById("filesContainerIMAGE").innerHTML += fileHTML;
+                    } else if (manual.data.files[i].type == "amf" || manual.data.files[i].type == "stl") {
+                        const fileHTML = generateFileCard(manual.data.files[i]);
+                        document.getElementById("filesContainer3D").innerHTML += fileHTML;
+                    } else {
+                        const fileHTML = generateFileCard(manual.data.files[i]);
+                        document.getElementById("filesContainerOTHERS").innerHTML += fileHTML;
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                title.textContent = "Erro ao carregar manual";
+                description.textContent = "";
+            }
+        }
+
+        // Função para gerar os cards das files do manual
+        function generateFileCard(file) {
+            return `
+<div id="fileCard" class="card">
+  <div class="card-body">
+    <div class='fileSvg'>
+      <svg width="27" height="33" viewBox="0 0 27 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M16.5467 0.373047H4C1.8 0.373047 0 2.17305 0 4.37305V32.373H26.6667V10.493L16.5467 0.373047ZM17.6889 4.2086L22.4756 9.70638H17.6889V4.2086ZM24.7111 30.5953H1.95556V4.37305C1.95556 3.63971 3.26667 2.15082 4 2.15082L15.7333 2.3286V11.6619H24.7111V30.5953ZM6.62667 17.7064H4V25.7997H5.66667V22.9997H6.62667C8.10667 22.9997 9.30667 21.813 9.30667 20.3464C9.30667 18.8797 8.10667 17.7064 6.62667 17.7064ZM6.62667 21.333H5.68V19.373H6.62667C7.17333 19.373 7.64 19.8264 7.64 20.3464C7.64 20.8664 7.17333 21.3197 6.62667 21.3197V21.333ZM13.3333 17.7997C12.9733 17.7997 12.64 17.7997 12.3333 17.7997H10.6667V25.7997H12.3333C12.64 25.7997 12.9733 25.7997 13.3333 25.7997C14.8133 25.7997 16 24.613 16 23.1597V20.453C16 18.9997 14.8133 17.813 13.3333 17.813V17.7997ZM14.3333 20.4664V23.133C14.3333 23.733 13.8533 24.133 13.3333 24.133C13.1467 24.133 12.76 24.133 12.3333 24.133V19.4664C12.76 19.4664 13.1467 19.4664 13.3333 19.4664C13.8533 19.4664 14.3333 19.8664 14.3333 20.4664ZM19 25.7997H17.3333V17.7064H22.6667V19.373H19V21.333H21.3333V22.9997H19V25.7997Z" fill="black"/>
+</svg>
+    </div>
+    <h5 id="fileTitle" class="card-title">${file.title}</h5>
+    <p id="fileDescription" class="card-text">${file.type}</p>
+    <a id="fileLink" href="${file.path}" target="_Blank" class="card-link">Abrir arquivo <i class="fas fa-external-link-alt"></i></a>
+  </div>
+</div>
+`;
+        }
+
+        async function changeStatusManual() {
+            try {
+                const response = await fetch(`/api/changeManualStatus/${manualId}`, {
+                    method: "PATCH",
+                });
+                if (!response) {
+                    throw new Error("Erro ao mudar status o manual");
+                }
+
+                const result = await response.json();
+
+                if (!result.active) {
+                    buttonManualStatus.textContent = "Desativado";
+                    buttonManualStatus.style.backgroundColor = "#D2D2D2";
+                } else {
+                    buttonManualStatus.textContent = "Ativo";
+                    buttonManualStatus.style.backgroundColor = "rgba(148, 220, 247, 0.3)";
+                }
+
+            } catch (err) {
+                console.error(err);
+                buttonManualStatus.textContent = "Erro";
+            }
+        }
+
+        async function manualFeedbacks() {
+            try {
+                const response = await fetch(`/api/getManuals/${manualId}`);
+                if (!response) {
+                    throw new Error('Erro ao listar feedbacks');
+                }
+
+                const result = await response.json();
+                for (let i = 0; i < result.length; i++) {
+                    listFeedbacks.innerHTML += `<tr><th>${result[i].user.name}</th><th>${result[i].message}</th><th>${new Date(result[i].updatedAt).toLocaleDateString()}</th></tr>`;
+                }
+
+                let table = new DataTable('#listFeedbacks', {
+                    responsive: true
+                });
+
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        buttonManualStatus.addEventListener("click", changeStatusManual);
+
+        attButton.addEventListener('click', () => {
+            window.location.href = `/engineer/manual-update/${manualId}`
+        })
+
+        // Adicionando a possibilidade de clique nos filtros de PDF, Vídeo, Imagem, 3D e outros
+        FilterPDF.addEventListener("click", () => {
+            filesContainerPDF.style.display = "flex";
+            FilterPDF.classList.add("active");
+            filesContainerVIDEO.style.display = "none";
+            FilterVIDEO.classList.remove("active");
+            filesContainerIMAGE.style.display = "none";
+            FilterIMAGE.classList.remove("active");
+            filesContainer3D.style.display = "none";
+            Filter3D.classList.remove("active");
+            filesContainerOTHERS.style.display = "none";
+            filterOTHERS.classList.remove("active");
+            const fileSvg = document.querySelectorAll(".fileSvg");
+            fileSvg.forEach((icon) => {
+                icon.innerHTML = `<svg width="27" height="33" viewBox="0 0 27 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M16.5467 0.373047H4C1.8 0.373047 0 2.17305 0 4.37305V32.373H26.6667V10.493L16.5467 0.373047ZM17.6889 4.2086L22.4756 9.70638H17.6889V4.2086ZM24.7111 30.5953H1.95556V4.37305C1.95556 3.63971 3.26667 2.15082 4 2.15082L15.7333 2.3286V11.6619H24.7111V30.5953ZM6.62667 17.7064H4V25.7997H5.66667V22.9997H6.62667C8.10667 22.9997 9.30667 21.813 9.30667 20.3464C9.30667 18.8797 8.10667 17.7064 6.62667 17.7064ZM6.62667 21.333H5.68V19.373H6.62667C7.17333 19.373 7.64 19.8264 7.64 20.3464C7.64 20.8664 7.17333 21.3197 6.62667 21.3197V21.333ZM13.3333 17.7997C12.9733 17.7997 12.64 17.7997 12.3333 17.7997H10.6667V25.7997H12.3333C12.64 25.7997 12.9733 25.7997 13.3333 25.7997C14.8133 25.7997 16 24.613 16 23.1597V20.453C16 18.9997 14.8133 17.813 13.3333 17.813V17.7997ZM14.3333 20.4664V23.133C14.3333 23.733 13.8533 24.133 13.3333 24.133C13.1467 24.133 12.76 24.133 12.3333 24.133V19.4664C12.76 19.4664 13.1467 19.4664 13.3333 19.4664C13.8533 19.4664 14.3333 19.8664 14.3333 20.4664ZM19 25.7997H17.3333V17.7064H22.6667V19.373H19V21.333H21.3333V22.9997H19V25.7997Z" fill="black"/>
+</svg>`;
+            });
+        });
+
+        FilterVIDEO.addEventListener("click", () => {
+            filesContainerPDF.style.display = "none";
+            FilterPDF.classList.remove("active");
+            filesContainerVIDEO.style.display = "flex";
+            FilterVIDEO.classList.add("active");
+            filesContainerIMAGE.style.display = "none";
+            FilterIMAGE.classList.remove("active");
+            filesContainer3D.style.display = "none";
+            Filter3D.classList.remove("active");
+            filesContainerOTHERS.style.display = "none";
+            filterOTHERS.classList.remove("active");
+            const fileSvg = document.querySelectorAll(".fileSvg");
+            fileSvg.forEach((icon) => {
+                icon.innerHTML = `<svg width="27" height="33" viewBox="0 0 48 49" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M18.54 38.2865L33.33 28.8665L18.54 19.4465V38.2865ZM21.75 25.2665L27.36 28.8665L21.75 32.4365V25.2665ZM0 5.43652V42.9365H48V5.43652H0ZM44.79 8.64652V14.6465H3.21V8.64652H44.79ZM3.21 39.7265V17.7365H44.79V39.7265H3.21Z" fill="black"/>
+</svg>`;
+            });
+        });
+
+        FilterIMAGE.addEventListener("click", () => {
+            filesContainerPDF.style.display = "none";
+            FilterPDF.classList.remove("active");
+            filesContainerVIDEO.style.display = "none";
+            FilterVIDEO.classList.remove("active");
+            filesContainerIMAGE.style.display = "flex";
+            FilterIMAGE.classList.add("active");
+            filesContainer3D.style.display = "none";
+            Filter3D.classList.remove("active");
+            filesContainerOTHERS.style.display = "none";
+            filterOTHERS.classList.remove("active");
+            const fileSvg = document.querySelectorAll(".fileSvg");
+            fileSvg.forEach((icon) => {
+                icon.innerHTML = `<svg width="27" height="33" viewBox="0 0 48 49" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_2166_283)">
+<path d="M0 0.186523V48.1865H48V0.186523H0ZM44.79 44.9765H3.21V3.39652H44.79V44.9765ZM11.43 25.0865H19.8V33.1865H22.59V15.1865H19.8V22.7165H11.43V15.1865H8.64V33.1865H11.43V25.0865ZM31.29 33.1865C31.302 33.1865 31.317 33.1865 31.3305 33.1865C32.874 33.1865 34.3275 32.798 35.5965 32.1125L35.5485 32.1365C36.765 31.427 37.7295 30.404 38.3505 29.177L38.3685 29.1365C38.994 27.9035 39.3615 26.4485 39.3615 24.9065C39.3615 24.833 39.36 24.758 39.3585 24.6845V24.695V23.585C39.3585 23.5595 39.3585 23.5295 39.3585 23.501C39.3585 21.938 38.9925 20.4605 38.343 19.148L38.3685 19.205C37.7295 17.9375 36.765 16.9145 35.5815 16.223L35.5485 16.205C34.398 15.5615 33.0255 15.1835 31.563 15.1835C31.4985 15.1835 31.4325 15.185 31.368 15.1865H26.217V33.1865H31.29ZM29.01 30.8165V17.5565H31.44C31.491 17.555 31.551 17.5535 31.6125 17.5535C33.0495 17.5535 34.3425 18.1655 35.247 19.1435L35.25 19.1465C36.1005 20.267 36.6135 21.686 36.6135 23.2235C36.6135 23.372 36.609 23.519 36.6 23.666L36.6015 23.6465V24.6665C36.6105 24.8 36.6165 24.956 36.6165 25.1135C36.6165 26.678 36.0675 28.1135 35.151 29.2385L35.16 29.2265C34.233 30.2105 32.922 30.824 31.467 30.824C31.374 30.824 31.2795 30.821 31.188 30.8165H31.2015H29.01Z" fill="black"/>
+</g>
+<defs>
+<clipPath id="clip0_2166_283">
+<rect width="48" height="48" fill="white" transform="translate(0 0.186523)"/>
+</clipPath>
+</defs>
+</svg>`;
+            });
+        });
+
+        Filter3D.addEventListener("click", () => {
+            filesContainerPDF.style.display = "none";
+            FilterPDF.classList.remove("active");
+            filesContainerVIDEO.style.display = "none";
+            FilterVIDEO.classList.remove("active");
+            filesContainerIMAGE.style.display = "none";
+            FilterIMAGE.classList.remove("active");
+            filesContainer3D.style.display = "flex";
+            Filter3D.classList.add("active");
+            filesContainerOTHERS.style.display = "none";
+            filterOTHERS.classList.remove("active");
+            const fileSvg = document.querySelectorAll(".fileSvg");
+            fileSvg.forEach((icon) => {
+                icon.innerHTML = `<svg width="27" height="33" viewBox="0 0 49 49" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_2166_285)">
+<path d="M43.4737 27.7865V4.5365H5.13371V27.7865L0.303711 35.4065V43.8365H48.3037V35.4065L43.4737 27.7865ZM40.2637 7.7465V26.2565H8.34371V7.7465H40.2637ZM7.86371 29.4665H40.8637L43.8637 34.2965H4.80371L7.80371 29.4665H7.86371ZM3.51371 37.5065H18.3037V40.5065H3.51371V37.5065ZM30.5137 40.5065V37.5065H45.1537V40.5065H30.5137Z" fill="black"/>
+</g>
+<defs>
+<clipPath id="clip0_2166_285">
+<rect width="48" height="48" fill="white" transform="translate(0.303711 0.186523)"/>
+</clipPath>
+</defs>
+</svg>`;
+            });
+        });
+
+        filterOTHERS.addEventListener("click", () => {
+            filesContainerPDF.style.display = "none";
+            FilterPDF.classList.remove("active");
+            filesContainerVIDEO.style.display = "none";
+            FilterVIDEO.classList.remove("active");
+            filesContainerIMAGE.style.display = "none";
+            FilterIMAGE.classList.remove("active");
+            filesContainer3D.style.display = "none";
+            Filter3D.classList.remove("active");
+            filesContainerOTHERS.style.display = "flex";
+            filterOTHERS.classList.add("active");
+            const fileSvg = document.querySelectorAll(".fileSvg");
+            fileSvg.forEach((icon) => {
+                icon.innerHTML = `<svg width="27" height="33" viewBox="0 0 48 49" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_2166_287)">
+<path d="M17.82 0.186523L6 11.3765V48.1865H42V0.186523H17.82ZM18 4.38652V11.0765H10.98L18 4.38652ZM38.79 44.9765H9.21V14.2565H21.21V3.39652H38.82V44.9765H38.79Z" fill="black"/>
+</g>
+<defs>
+<clipPath id="clip0_2166_287">
+<rect width="48" height="48" fill="white" transform="translate(0 0.186523)"/>
+</clipPath>
+</defs>
+</svg>`;
+            });
+        });
+
+        // chamando as funções para carregar os detalhes do manual
+        manualDetails();
+        manualFeedbacks();
+        activeLoading();
+    </script>
+
+    <script>
+    </script>

@@ -1,0 +1,269 @@
+<link rel="stylesheet" href="/styles/header.css" />
+
+<div class="blur-container hidden" id="notifications-modal">
+    <div class="reporte-container">
+        <h3>Notificações</h3>
+        <button id="notifications-button-close">
+    <svg
+      width="27"
+      height="27"
+      viewBox="0 0 27 27"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clip-path="url(#clip0_4289_961)">
+        <path
+          d="M27 1.38375L25.6163 0L13.5 12.15L1.38375 0.084375L0 1.46812L12.0656 13.5L0.084375 25.5319L1.46812 27L13.5 14.9344L25.5319 27L26.9156 25.6163L14.85 13.5L27 1.38375Z"
+          fill="black"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_4289_961">
+          <rect width="27" height="27" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  </button>
+        <div id="allNotifications" class="d-flex justify-content-center" style="flex-direction: column; gap: 17px; margin-top: 20px;">
+
+        </div>
+        <div class="button">
+            <button id="moreNotifications" style="background-color: #0672CB; color: white; border: none; margin-top: 24px; width: 30%; padding: 8px 8px 8px 8px; border-radius: 5px; float: right;">Ver mais</button>
+        </div>
+    </div>
+</div>
+
+<div class="d-inline-flex py-3 px-5 align-items-center justify-content-between navbar navbar-default fixed-top bg-light" style="width: 100%; box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.10); height: 80px;">
+    <a href="/">
+        <svg width="268" height="34" viewBox="0 0 268 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clip-path="url(#clip0_4382_304)">
+      <path
+        d="M267.582 21.8377C267.582 18.6126 265.737 17.2268 262.189 16.4625C258.642 15.6982 256.485 15.3874 256.485 12.9266C256.485 11.0873 257.875 10.0122 260.487 10.0122C263.723 10.0122 264.801 11.398 264.801 13.2373L265.113 13.5481H266.503L266.815 13.2373C266.815 9.70145 263.891 8.32404 260.344 8.32404C256.342 8.32404 254.337 10.4741 254.337 12.935C254.337 15.8494 256.494 17.2352 260.041 17.8483C263.588 18.6126 265.433 18.9233 265.433 21.8377C265.433 23.6771 264.355 25.0629 260.808 25.0629C257.572 25.0629 256.182 23.2235 256.182 21.0734L255.87 20.7627H254.488L254.177 21.0734C254.177 24.2986 256.645 26.7594 260.917 26.7594C265.383 26.9106 267.54 24.7605 267.54 21.8461L267.582 21.8377ZM252.171 18.3018L252.483 17.9911V16.916C252.508 16.6977 252.517 16.4457 252.517 16.1937C252.517 11.8431 248.986 8.32404 244.622 8.32404C240.257 8.32404 236.727 11.8431 236.727 16.1937C236.727 16.4457 236.735 16.7061 236.761 16.9496V16.916V17.6803C236.71 18.0163 236.685 18.411 236.685 18.8058C236.685 23.2907 240.333 26.919 244.824 26.919C244.858 26.919 244.9 26.919 244.934 26.919C245.127 26.9442 245.355 26.9526 245.582 26.9526C248.801 26.9526 251.472 24.6345 252.003 21.5858L252.011 21.5438L251.699 21.233H250.275L249.964 21.5438C249.416 23.6015 247.562 25.0881 245.363 25.0881C245.245 25.0881 245.136 25.0881 245.018 25.0797H245.035C241.69 24.9789 239.019 22.2577 239.019 18.9065C239.019 18.8058 239.019 18.7134 239.027 18.6126V18.6294L239.339 18.3186H252.138L252.171 18.3018ZM250.014 16.4625H239.229L238.918 16.1517C238.909 16.0593 238.909 15.9502 238.909 15.841C238.909 12.6998 241.471 10.1466 244.622 10.1466C247.773 10.1466 250.334 12.6998 250.334 15.841C250.334 15.9502 250.334 16.0593 250.326 16.1685V16.1517L250.014 16.4625ZM234.266 26.1379V9.08833L233.955 8.77758H232.581L232.118 9.08833V26.1379L232.43 26.4487H233.82L234.266 26.1379ZM234.266 5.56083V3.41074L233.955 3.09998H232.581L232.118 3.41074V5.56083L232.43 5.87159H233.82L234.266 5.56083ZM220.785 25.0629C217.238 25.0629 215.081 22.602 215.081 17.5039C215.081 12.5906 217.238 9.94501 220.785 9.94501C224.333 9.94501 226.49 12.4059 226.49 17.5039C226.49 22.602 224.29 25.0629 220.785 25.0629ZM226.481 23.9878C226.481 28.5988 225.403 32.1263 221.089 32.1263C217.853 32.1263 216.775 30.7405 216.463 28.9011L216.151 28.5904H214.719L214.407 28.9011C214.719 31.8155 216.876 33.8144 221.148 33.8144C225.773 33.8144 228.731 30.9 228.731 23.8282V9.08833L228.419 8.77758H227.341L227.029 9.08833L226.717 11.2384H226.405C225.327 9.46628 223.397 8.30725 221.198 8.30725C221.021 8.30725 220.853 8.31565 220.676 8.33244H220.701C215.772 8.33244 213.118 12.3219 213.118 17.5711C213.118 22.9464 215.587 26.8098 220.701 26.8098C220.886 26.835 221.105 26.8434 221.333 26.8434C223.498 26.8434 225.386 25.6676 226.388 23.9206L226.405 23.8954L226.481 23.9878ZM203.175 10.1634C206.723 10.1634 209.183 13.0778 209.183 17.7223C209.183 22.3669 206.714 25.2812 203.175 25.2812C199.637 25.2812 197.168 22.3669 197.168 17.7223C197.193 12.9266 199.637 10.1634 203.175 10.1634ZM203.175 26.9022C203.192 26.9022 203.218 26.9022 203.243 26.9022C207.759 26.9022 211.416 23.2571 211.416 18.7554C211.416 18.369 211.391 17.9911 211.34 17.6215L211.348 17.6635C211.382 17.3696 211.407 17.0252 211.407 16.6809C211.407 12.1539 207.725 8.48362 203.184 8.48362C198.642 8.48362 194.96 12.1539 194.96 16.6809C194.96 17.0252 194.986 17.3696 195.019 17.6971V17.6551C194.969 17.9827 194.943 18.3606 194.943 18.747C194.943 23.2487 198.6 26.8938 203.116 26.8938C203.142 26.8938 203.159 26.8938 203.184 26.8938L203.175 26.9022ZM192.551 26.1379V1.88215L192.087 1.5714H190.697L190.385 1.88215V26.1463L190.697 26.4571H192.087L192.551 26.1379ZM179.609 10.1802C183.156 10.1802 185.616 13.0946 185.616 17.7391C185.616 22.3836 183.147 25.298 179.609 25.298C176.07 25.298 173.601 22.3836 173.601 17.7391C173.601 12.9266 176.07 10.1634 179.609 10.1634V10.1802ZM179.609 26.919C179.625 26.919 179.651 26.919 179.676 26.919C184.192 26.919 187.849 23.2739 187.849 18.7722C187.849 18.3858 187.824 18.0079 187.773 17.6383L187.782 17.6803C187.815 17.3864 187.841 17.042 187.841 16.6977C187.841 12.1707 184.159 8.50042 179.617 8.50042C175.076 8.50042 171.393 12.1707 171.393 16.6977C171.393 17.042 171.419 17.3864 171.452 17.7139V17.6719C171.41 17.9911 171.377 18.369 171.377 18.747C171.377 23.2487 175.033 26.8938 179.55 26.8938C179.575 26.8938 179.592 26.8938 179.617 26.8938L179.609 26.919ZM169.279 26.1547V15.4042C169.321 15.1271 169.346 14.8163 169.346 14.4972C169.346 11.0956 166.574 8.33244 163.162 8.33244C163.035 8.33244 162.917 8.33244 162.791 8.34084H162.808C162.715 8.33244 162.605 8.33244 162.496 8.33244C160.246 8.33244 158.266 9.48308 157.12 11.23L157.103 11.2552H156.75L156.438 9.10513L156.126 8.79437H155.064L154.753 9.10513V26.1547L155.064 26.4655H156.455L156.766 26.1547V16.4625C156.766 12.4731 158.612 10.0122 162.471 10.0122C165.394 10.0122 167.096 11.8515 167.096 15.3874V26.1379L167.408 26.4487H168.95L169.262 26.1379L169.279 26.1547ZM151.104 26.1547V15.4042C151.146 15.1271 151.172 14.8163 151.172 14.4972C151.172 11.0956 148.4 8.33244 144.987 8.33244C144.861 8.33244 144.743 8.33244 144.616 8.34084H144.633C144.541 8.33244 144.431 8.33244 144.322 8.33244C142.072 8.33244 140.092 9.48308 138.946 11.23L138.929 11.2552H138.617V2.01653L138.154 1.5546H136.764L136.452 1.86536V26.1295L136.764 26.4403H138.154L138.466 26.1295V16.4625C138.466 12.4731 140.311 10.0122 144.17 10.0122C147.094 10.0122 148.796 11.8515 148.796 15.3874V26.1379L149.107 26.4487H150.498L151.113 26.1379L151.104 26.1547ZM120.291 17.5543C120.291 12.641 122.76 9.99541 126.299 9.99541C126.417 9.98701 126.552 9.9786 126.686 9.9786C129.223 9.9786 131.321 11.8431 131.683 14.2704V14.2956L131.995 14.6064H133.537L133.848 14.2956C133.427 10.8857 130.537 8.26525 127.04 8.26525C126.771 8.26525 126.501 8.28204 126.24 8.31564H126.274C121.648 8.31564 118.109 11.23 118.109 17.5543C118.109 24.0046 121.656 26.793 126.274 26.793C126.476 26.8182 126.72 26.8266 126.956 26.8266C130.478 26.8266 133.385 24.223 133.848 20.8383V20.8047L133.537 20.4939H132.146L131.835 20.8047C131.523 23.2571 129.45 25.1301 126.931 25.1301C126.754 25.1301 126.585 25.1217 126.417 25.1049H126.434C122.886 25.0713 120.274 22.6104 120.274 17.5459L120.291 17.5543ZM116.432 18.3186L116.744 18.0079V16.916C116.786 16.6305 116.803 16.2945 116.803 15.9586C116.803 11.734 113.374 8.31564 109.136 8.31564C109.043 8.31564 108.959 8.31564 108.866 8.32404H108.883C108.832 8.32404 108.782 8.32404 108.723 8.32404C104.442 8.32404 100.971 11.7844 100.971 16.0509C100.971 16.3617 100.988 16.6641 101.022 16.958V16.9244V17.6887C100.971 18.0247 100.946 18.4194 100.946 18.8142C100.946 23.2991 104.586 26.9274 109.085 26.9274C109.119 26.9274 109.161 26.9274 109.195 26.9274C109.388 26.9526 109.616 26.961 109.843 26.961C113.062 26.961 115.733 24.6429 116.264 21.5942L116.272 21.5522L115.96 21.2414H114.57L114.258 21.5522C113.711 23.6099 111.857 25.0965 109.658 25.0965C109.54 25.0965 109.43 25.0965 109.313 25.0881H109.329C105.984 24.9873 103.313 22.2661 103.313 18.9149C103.313 18.8142 103.313 18.7218 103.322 18.621V18.6378L103.634 18.327H116.432V18.3186ZM114.275 16.4793H103.49L103.179 16.1685C103.17 16.0761 103.17 15.967 103.17 15.8578C103.17 12.7166 105.732 10.1634 108.883 10.1634C112.034 10.1634 114.595 12.7166 114.595 15.8578C114.595 15.967 114.595 16.0761 114.587 16.1853V16.1685L114.275 16.4793ZM104.729 2.96561V1.88215L104.265 1.5714H85.7794L85.4676 1.88215V2.9572L85.7794 3.26796H93.6406L93.9524 3.57872V26.0035L94.2641 26.3143H95.6544L95.9661 26.0035V3.72989L96.2779 3.41914H104.291L104.754 2.9572L104.729 2.96561ZM85.3497 21.5438V26.4571H69.1217V1.563H74.8259V21.527L85.3497 21.5438ZM10.7733 26.4655C16.5618 26.3983 21.4234 22.4844 22.8895 17.1764L22.9064 17.084L37.0954 28.1452L51.2506 17.084V26.4487H67.2596V21.5354H56.8032V1.5714H51.099V10.9361L37.5419 21.5354L34.4581 19.2341L48.0151 8.6684L44.0129 5.59443L30.4559 16.1601L27.372 13.8589L40.9291 3.25956L36.9268 0.202393L22.7716 11.2552C21.3139 5.8212 16.4185 1.88215 10.5963 1.88215C10.5879 1.88215 10.5795 1.88215 10.5795 1.88215H0.409607V26.7594H10.7312L10.7733 26.4655ZM6.4593 21.5438V6.4763H10.925C14.7924 6.85425 17.7919 10.0794 17.7919 14.0016C17.7919 17.9239 14.7924 21.149 10.9502 21.527H10.9165L6.4593 21.5438Z"
+        fill="#0672CB"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_4382_304">
+        <rect width="268" height="34" fill="white" />
+      </clipPath>
+    </defs>
+  </svg>
+    </a>
+    <div class="d-inline-flex gap-5">
+        <div class="dropdown">
+            <button class="d-flex   flex-column justify-content-center align-items-center border-0 bg-transparent">
+          <div id="notificationsDiv">
+            <svg width="31" height="32" viewBox="0 0 31 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.4646 32C13.0346 32 11.0646 30.03 11.0646 27.6V26.64H19.8646V27.6C19.8536 30.025 17.8896 31.989 15.4646 32ZM13.1446 28.58C13.5306 29.492 14.4186 30.12 15.4526 30.12C15.4566 30.12 15.4606 30.12 15.4646 30.12H15.4636C16.4836 30.117 17.3596 29.498 17.7376 28.616L17.7436 28.6H13.1436L13.1446 28.58ZM29.1446 24.92H1.72462C1.12362 24.916 0.611615 24.539 0.407615 24.01L0.404615 24C0.389615 23.919 0.380615 23.825 0.380615 23.73C0.380615 23.635 0.389615 23.541 0.405615 23.451L0.404615 23.46C0.404615 23.456 0.404615 23.452 0.404615 23.448C0.404615 23.055 0.548615 22.695 0.786615 22.418L0.784615 22.42L5.68462 17.56V9.78C5.68462 4.379 10.0636 0 15.4646 0C20.8656 0 25.2446 4.379 25.2446 9.78V17.56L30.2046 22.48C30.4526 22.747 30.6046 23.106 30.6046 23.5C30.6046 23.507 30.6046 23.514 30.6046 23.521C30.6136 23.59 30.6196 23.669 30.6196 23.75C30.6196 23.831 30.6146 23.911 30.6036 23.989L30.6046 23.98C30.4076 24.542 29.8826 24.938 29.2646 24.94L29.1446 24.92ZM2.72462 22.92H28.1446L23.2846 18V9.88C23.2846 5.561 19.7836 2.06 15.4646 2.06C11.1456 2.06 7.64462 5.561 7.64462 9.88V18L2.72462 22.92Z" fill="#6E6E6E"/>
+            </svg>
+          </div>
+            <p id="notificationText" style="color: #6E6E6E; margin: 0; font-size: 14px;">Notificações</p>
+        </button>
+            <div class="dropdown-content">
+                <a id="NotificationsRead" style="font-size: 12px;" href="#">Marcar tudo como lido</a>
+                <div id="dropdownNotifications">
+
+                </div>
+                <a href="#" class="see-more" id="notifications-button-open">Ver mais</a>
+            </div>
+        </div>
+        <button class="d-flex flex-column justify-content-center align-items-center border-0 bg-transparent" onclick="getUserInfo()">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 20.1C19.722 20.1 22.74 17.082 22.74 13.36C22.74 9.638 19.722 6.62 16 6.62C12.278 6.62 9.26 9.638 9.26 13.36C9.26 13.367 9.26 13.374 9.26 13.381C9.271 17.095 12.285 20.1 16 20.1ZM16 8.78C18.532 8.791 20.58 10.846 20.58 13.38C20.58 15.92 18.521 17.98 15.98 17.98C13.439 17.98 11.38 15.921 11.38 13.38C11.391 10.837 13.455 8.78 16 8.78ZM16 0C7.163 0 0 7.163 0 16C0 24.837 7.163 32 16 32C24.837 32 32 24.837 32 16C32 7.163 24.837 0 16 0ZM16 2.14C23.653 2.157 29.85 8.365 29.85 16.02C29.85 19.362 28.669 22.429 26.701 24.824L26.72 24.8C25.79 22.556 24.274 20.712 22.361 19.407L22.32 19.38L21.66 18.94L21.06 19.44C19.686 20.542 17.921 21.209 16 21.209C14.079 21.209 12.314 20.542 10.924 19.427L10.94 19.439L10.34 18.939L9.68 19.359C7.726 20.691 6.21 22.535 5.309 24.7L5.28 24.779C3.328 22.409 2.144 19.342 2.144 15.999C2.144 8.346 8.347 2.141 15.999 2.139L16 2.14ZM6.94 26.46C7.584 24.495 8.728 22.841 10.223 21.594L10.24 21.58C11.854 22.688 13.85 23.349 16 23.349C18.15 23.349 20.146 22.688 21.795 21.557L21.76 21.58C23.263 22.848 24.405 24.499 25.038 26.384L25.06 26.46C22.652 28.57 19.476 29.857 16 29.857C12.524 29.857 9.348 28.57 6.924 26.446L6.94 26.46Z" fill="#6E6E6E"/>
+        </svg>
+        <p style="color: #6E6E6E; margin: 0; font-size: 14px;">Perfil</p>
+    </button>
+    </div>
+</div>
+
+<script>
+    document.getElementById('notifications-button-open').addEventListener('click', function() {
+        document.getElementById('notifications-modal').classList.remove('hidden')
+    });
+    document.getElementById('notifications-button-close').addEventListener('click', function() {
+        document.getElementById('notifications-modal').classList.add('hidden')
+    });
+
+    async function getUserInfo() {
+        let token = localStorage.getItem('access_token');
+        if (token) {
+            fetch('/profile', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': token,
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 403) {
+                            throw new Error('Forbidden');
+                        }
+                        throw new Error('Erro na requisição');
+                    }
+                    return response.json();
+                })
+                .then(user => {
+                    if (user.isAdmin) {
+                        window.location.href = '/engineer/profile';
+                    } else {
+                        window.location.href = '/mounter/profile';
+                    }
+                })
+                .catch(error => {
+                    console.log('Erro ao buscar perfil do usuário:', error);
+                });
+        } else {
+            console.log('Token não encontrado');
+            window.location.href = '/login'; // Redirecionar para a página de login se o token não for encontrado
+        }
+    }
+
+    async function notifications() {
+
+        const token = localStorage.getItem('access_token');
+        const dropdown = document.getElementById('dropdownNotifications');
+        const allNotifications = document.getElementById('allNotifications');
+        const seeMoreButton = document.getElementById('notifications-button-open');
+        const moreNotificationsButton = document.getElementById('moreNotifications');
+        const NotificationsRead = document.getElementById('NotificationsRead');
+        const notificationsDiv = document.getElementById('notificationsDiv');
+        const notificationText = document.getElementById('notificationText');
+        let page = 1;
+
+        try {
+            const response = await fetch('/api/notificationsByUser', {
+                method: 'POST',
+                headers: {
+                    'Authorization': token,
+                },
+                body: JSON.stringify({
+                    page: page
+                })
+            });
+            const notifications = await response.json();
+
+            function onload() {
+
+                if (notifications.length === 0) {
+                    dropdown.innerHTML = 'Sem notificações para mostrar'
+                    dropdown.style.textAlign = 'center';
+                }
+
+                for (let i = 0; i <= 1; i++) {
+
+                    if (notifications[i].read == false) {
+                        dropdown.innerHTML += `<div class="notification" style="display: flex;">
+                    <span class="warning-icon"><svg width="27" height="28" viewBox="0 0 27 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M13.5 2.30566L0 25.6944H27L13.5 2.30566ZM13.5 5.68066L24.03 23.9057H2.97L13.5 5.74816V5.68066ZM12.6225 20.75H14.31V22.4375H12.6225V20.75ZM12.6225 10.7094H14.31V19.1469H12.6225V10.7094Z" fill="#FD0C0C"/>
+                    </svg></span> <h6 style="margin-bottom: 0px;">${notifications[i].message}</h6>
+                  </div>`
+                        notificationsDiv.innerHTML = `<svg width="31" height="32" viewBox="0 0 31 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M15.4646 32C13.0346 32 11.0646 30.03 11.0646 27.6V26.64H19.8646V27.6C19.8536 30.025 17.8896 31.989 15.4646 32ZM13.1446 28.58C13.5306 29.492 14.4186 30.12 15.4526 30.12C15.4566 30.12 15.4606 30.12 15.4646 30.12H15.4636C16.4836 30.117 17.3596 29.498 17.7376 28.616L17.7436 28.6H13.1436L13.1446 28.58ZM29.1446 24.92H1.72462C1.12362 24.916 0.611615 24.539 0.407615 24.01L0.404615 24C0.389615 23.919 0.380615 23.825 0.380615 23.73C0.380615 23.635 0.389615 23.541 0.405615 23.451L0.404615 23.46C0.404615 23.456 0.404615 23.452 0.404615 23.448C0.404615 23.055 0.548615 22.695 0.786615 22.418L0.784615 22.42L5.68462 17.56V9.78C5.68462 4.379 10.0636 0 15.4646 0C20.8656 0 25.2446 4.379 25.2446 9.78V17.56L30.2046 22.48C30.4526 22.747 30.6046 23.106 30.6046 23.5C30.6046 23.507 30.6046 23.514 30.6046 23.521C30.6136 23.59 30.6196 23.669 30.6196 23.75C30.6196 23.831 30.6146 23.911 30.6036 23.989L30.6046 23.98C30.4076 24.542 29.8826 24.938 29.2646 24.94L29.1446 24.92ZM2.72462 22.92H28.1446L23.2846 18V9.88C23.2846 5.561 19.7836 2.06 15.4646 2.06C11.1456 2.06 7.64462 5.561 7.64462 9.88V18L2.72462 22.92Z" fill="#BB2A33"/>
+                                              </svg>`;
+                        notificationText.style.color = '#BB2A33';
+
+
+                    } else {
+                        dropdown.innerHTML += `<div class="notification">
+                    <span class="warning-icon"><svg xmlns="http://www.w3.org/2000/svg" width="27" height="28" viewBox="0 0 27 28" fill="none">
+                      <path d="M13.5 2.30562L0 25.6944H27L13.5 2.30562ZM13.5 5.68062L24.03 23.9056H2.97L13.5 5.74812V5.68062ZM12.6225 20.75H14.31V22.4375H12.6225V20.75ZM12.6225 10.7094H14.31V19.1469H12.6225V10.7094Z" fill="#6E6E6E"/>
+                    </svg></span> ${notifications[i].message}
+                </div>`
+                    }
+                }
+            }
+
+            function loadNotifications() {
+                for (let i = 0; i < notifications.length; i++) {
+                    if (notifications[i].read == false) {
+                        allNotifications.innerHTML += `<div class="notification" style="display: flex;">
+                    <span class="warning-icon"><svg style="margin-right: 16px" width="27" height="28" viewBox="0 0 27 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M13.5 2.30566L0 25.6944H27L13.5 2.30566ZM13.5 5.68066L24.03 23.9057H2.97L13.5 5.74816V5.68066ZM12.6225 20.75H14.31V22.4375H12.6225V20.75ZM12.6225 10.7094H14.31V19.1469H12.6225V10.7094Z" fill="#FD0C0C"/>
+                    </svg></span> <h6 style="margin-bottom: 0px;">${notifications[i].message}</h6>
+                  </div>`
+                    } else {
+                        allNotifications.innerHTML += `<div class="notification">
+                    <span class="warning-icon"><svg style="margin-right: 16px" xmlns="http://www.w3.org/2000/svg" width="27" height="28" viewBox="0 0 27 28" fill="none">
+                      <path d="M13.5 2.30562L0 25.6944H27L13.5 2.30562ZM13.5 5.68062L24.03 23.9056H2.97L13.5 5.74812V5.68062ZM12.6225 20.75H14.31V22.4375H12.6225V20.75ZM12.6225 10.7094H14.31V19.1469H12.6225V10.7094Z" fill="#6E6E6E"/>
+                    </svg></span> ${notifications[i].message}
+                </div>`
+                    }
+                }
+            }
+
+            async function seeMoreNotifications() {
+                page++
+                const response = await fetch('/api/notificationsByUser', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token,
+                    },
+                    body: JSON.stringify({
+                        page: page
+                    })
+                });
+                const notaficationsPage = await response.json();
+                allNotifications.style.display = 'none';
+                allNotifications.innerHTML = '';
+                for (let i = 0; i < notaficationsPage.length; i++) {
+                    if (notaficationsPage[i].read == false) {
+                        allNotifications.innerHTML += `<div class="notification" style="display: flex;">
+                    <span class="warning-icon"><svg style="margin-right: 16px" width="27" height="28" viewBox="0 0 27 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M13.5 2.30566L0 25.6944H27L13.5 2.30566ZM13.5 5.68066L24.03 23.9057H2.97L13.5 5.74816V5.68066ZM12.6225 20.75H14.31V22.4375H12.6225V20.75ZM12.6225 10.7094H14.31V19.1469H12.6225V10.7094Z" fill="#FD0C0C"/>
+                    </svg></span> <h6 style="margin-bottom: 0px;">${notaficationsPage[i].message}</h6>
+                  </div>`
+                    } else {
+                        allNotifications.innerHTML += `<div class="notification">
+                    <span class="warning-icon"><svg style="margin-right: 16px" xmlns="http://www.w3.org/2000/svg" width="27" height="28" viewBox="0 0 27 28" fill="none">
+                      <path d="M13.5 2.30562L0 25.6944H27L13.5 2.30562ZM13.5 5.68062L24.03 23.9056H2.97L13.5 5.74812V5.68062ZM12.6225 20.75H14.31V22.4375H12.6225V20.75ZM12.6225 10.7094H14.31V19.1469H12.6225V10.7094Z" fill="#6E6E6E"/>
+                    </svg></span> ${notaficationsPage[i].message}
+                </div>`
+                    }
+                }
+                allNotifications.style.display = 'flex';
+
+                if (notaficationsPage.length < 7) {
+                    moreNotificationsButton.removeEventListener('click', seeMoreNotifications);
+                    moreNotificationsButton.textContent = 'Sem mais notificações'
+                }
+
+            }
+
+            async function markAllAsRead() {
+                const markAsReadResponse = await fetch('/api/markAllAsRead', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token,
+                    }
+                });
+
+                if (markAsReadResponse.ok) {
+                    location.reload();
+                }
+
+            }
+
+            seeMoreButton.addEventListener('click', () => {
+                allNotifications.innerHTML = '';
+                loadNotifications();
+                page = 1;
+                if (notifications.length === 7) {
+                    moreNotificationsButton.addEventListener('click', seeMoreNotifications);
+                    moreNotificationsButton.textContent = 'Ver mais';
+                } else {
+                    moreNotificationsButton.style.display = 'none';
+                }
+
+            });
+
+            NotificationsRead.addEventListener('click', markAllAsRead);
+
+            onload();
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    notifications();
+</script>

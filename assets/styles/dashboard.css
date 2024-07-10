@@ -1,0 +1,54 @@
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.sidebar {
+    height: 100vh;
+    background: white;
+    padding-top: 20px;
+}
+.sidebar .nav-link {
+    margin-bottom: 20px;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+.sidebar .nav-link i {
+    margin-right: 10px;
+}
+.sidebar .nav-link:hover {
+    background: #e9ecef;
+    border-radius: 5px;
+}
+.content {
+    padding: 50px;
+}
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.card {
+    width: 100%;
+    margin-top: 20px;
+}
+.chart-container {
+    position: relative;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chart-container canvas {
+    max-width: 100%;
+}
+
+#filter01, #filter02 {
+    background-color: #F5F6F7;
+    border-radius: 5px;
+}
+
+.select-effect {
+    background-color: #333;
+}

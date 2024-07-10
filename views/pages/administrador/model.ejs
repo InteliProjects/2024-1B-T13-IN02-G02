@@ -1,0 +1,104 @@
+<title>
+    <%- title = "Cadastrar Modelo" %>
+</title>
+<%- include('../components/header.ejs'); %>
+    <link rel="stylesheet" href="/styles/model.css" />
+    <div style="margin-top: 80px; width: 100%; position: relative" class="d-flex">
+        <%- include('../components/sidebar-adm.ejs'); %>
+            <div id="loading" class="spinner-border text-primary" role="status" style="display: none; position: fixed; left: 50%; top: 50%; z-index: 1000;"></div>
+            <div class="" style="padding-inline: 3rem; padding-block: 2rem;">
+                <div class="mt-4">
+                    <h1 class="display-5 mb-4">Cadastro de novos Modelos</h1>
+
+                    <!-- Link to Select2 CSS -->
+                    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+                    <!-- jQuery -->
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+                    <!-- Select2 JS -->
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+                    <form onsubmit="createModel(event)">
+                        <div class="form-group mb-3">
+                            <label for="equipes" class="form-label">Título do Modelo<span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="title" name="title" required>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group mb-3">
+                            <label for="manuais" class="form-label">Selecione a Categoria <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <select id="categoria" name="categoria" class="form-control" required>
+                                  <option value="" disabled selected>Selecione</option>
+                                  <option value="1">Computadores</option>
+                                  <option value="2">Servidores</option>
+                                  <option value="3">Storage</option>
+                                </select>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icone-editar" width="20" height="22" viewBox="0 0 20 22" fill="none">
+            <path d="M18.2504 10.3263L10.7291 18.9338V0L9.27164 0V18.9338L1.75039 10.3263L0.650391 11.2887L10.0004 22L19.3366 11.2887L18.2504 10.3263Z" fill="#0E0E0E"/>
+          </svg>
+
+                            </div>
+
+                        </div>
+
+
+                        <div>
+                            <button type="submit" class="btn btn-primary mt-5 py-3 px-5">ENVIAR</button>
+                        </div>
+                    </form>
+
+                    <script>
+                        async function createModel(event) {
+                            activeLoading()
+                            event.preventDefault();
+
+                            const name = document.getElementById("title").value;
+                            const type = document.getElementById("categoria").value;
+
+                            try {
+                                const response = await fetch('/api/create-model', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        name,
+                                        type
+                                    }),
+                                });
+
+                                disableLoading()
+                                alert("Modelo cadastrado com Sucesso.");
+                                window.location.href = '/engineer/dashboard';
+
+                            } catch (error) {
+                                disableLoading()
+                                console.error('Erro:', error);
+                                alert('Erro ao criar o Modelo. Detalhes: ' + error.message);
+                            }
+                        }
+
+                        function activeLoading() {
+                            const loading = document.getElementById('loading');
+                            loading.style.display = 'block';
+                        }
+
+                        function disableLoading() {
+                            const loading = document.getElementById('loading');
+                            loading.style.display = 'none';
+                        }
+                    </script>
+                </div>
+            </div>
+    </div>
+
+    <style>
+        .select2-container--default .select2-selection--multiple {
+            overflow-y: auto;
+        }
+    </style>

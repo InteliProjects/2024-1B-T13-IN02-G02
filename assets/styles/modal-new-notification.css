@@ -1,0 +1,93 @@
+.new-notification {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    background-color: #fff;
+    padding: 1.5rem;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid black;
+    max-width: 30vw;
+    animation: slideOut 0.5s forwards;
+}
+
+div.closed-notification {
+    animation: slideIn 0.5s forwards;
+}
+
+.new-notification .top-container {
+    display: flex;
+    gap: 1rem;
+}
+
+.new-notification .top-container h5 {
+    font-size: 1rem;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    color: #0e0e0e;
+    margin-top: 0.5rem;
+}
+
+.new-notification .top-container h6 {
+    font-size: 0.9rem;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color: #0e0e0e;
+    margin-top: 1.5rem;
+}
+
+.new-notification .top-container p {
+    font-size: 0.8rem;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color: #6E6E6E;
+    margin-top: 0.75rem;
+}
+
+.new-notification a.open-task {
+    background-color: #0672CB;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 1rem;
+    align-self: flex-end;
+    text-decoration: none;
+}
+
+.new-notification button.close {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(calc(100% + 2rem));
+    }
+}
+
+@keyframes slideOut {
+    0% {
+        transform: translateX(calc(100% + 2rem));
+    }
+    100% {
+        transform: translateX(0);
+    }
+}

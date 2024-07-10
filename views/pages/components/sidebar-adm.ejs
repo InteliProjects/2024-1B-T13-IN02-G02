@@ -1,0 +1,98 @@
+<link rel="stylesheet" href="/styles/sidebar-adm.css" />
+<div class="sidebar" id="sidebar" onmouseenter="(() => {
+    const paragraphInsideLi = document.querySelectorAll('.sidebar a p');
+    document.getElementById('sidebar').classList.add('sidebar-opened');
+    paragraphInsideLi.forEach((p) => {
+        p.classList.remove('hideText');
+    });
+})()" onmouseleave="(() => {
+        const paragraphInsideLi = document.querySelectorAll('.sidebar a p');
+        document.getElementById('sidebar').classList.remove('sidebar-opened');
+        paragraphInsideLi.forEach((p) => {
+            p.classList.add('hideText');
+        });
+    })()">
+    <ul>
+        <a href="/engineer/dashboard" style="display: flex; align-items: center; gap: 20px" id="home">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_4429_178)">
+                <path d="M40 22.35L20 0.924988L0 22.35L1.85 24.1L4.15 21.6V39.1H16.3V25H23.8V39.15H35.925V21.65L38.25 24.15L40.125 22.4L40 22.35ZM33.275 36.525H26.225V22.5H13.725V36.65H6.7V19.15L20 4.64999L33.275 18.875V36.525Z" fill="#6E6E6E"/>
+                </g>
+                <defs>
+                <clipPath id="clip0_4429_178">
+                <rect width="40" height="40" fill="white"/>
+                </clipPath>
+                </defs>
+            </svg>
+            <p class="hideText">Home</p>
+        </a>
+        <a href="/engineer/search" style="display: flex; align-items: center; gap: 20px" id="search">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.2 30.825H2.675V12.5H32.1V14.375C33.1112 14.9975 33.9825 15.7175 34.7425 16.5412L34.75 16.55V2.25H0V33.475H20C18.9087 32.7425 17.9825 31.8637 17.2212 30.8537L17.2 30.825ZM2.675 5H32.1V10H2.675V5ZM34.75 30.625L33.375 29.25C33.9937 28.4125 34.4675 27.4262 34.7375 26.3575L34.75 26.3C34.9087 25.6763 35 24.96 35 24.2225C35 24.1975 35 24.1712 35 24.1462V24.15C34.955 21.5712 33.8287 19.265 32.0575 17.6562L32.05 17.65C30.4962 16.1687 28.3887 15.2575 26.0687 15.2575C21.2775 15.2575 17.3937 19.1412 17.3937 23.9325C17.3937 26.7325 18.7212 29.2237 20.78 30.81L20.8 30.825C22.2762 32.0825 24.205 32.8475 26.3125 32.8475C28.2512 32.8475 30.0387 32.2 31.4712 31.11L31.45 31.125L38.075 37.75L39.95 35.85L34.7 30.625H34.75ZM32.1 25.95C31.3087 28.4325 29.0225 30.2 26.3237 30.2C22.9825 30.2 20.2737 27.4912 20.2737 24.15C20.2737 20.8087 22.9825 18.1 26.3237 18.1C29.0225 18.1 31.3087 19.8675 32.0875 22.3075L32.0987 22.35C32.2887 22.8862 32.3987 23.505 32.3987 24.15C32.3987 24.795 32.2887 25.4137 32.0862 25.9887L32.1 25.95Z" fill="#6E6E6E"/>
+            </svg>
+            <p class="hideText" style="white-space: nowrap;">Buscar manuais</p>
+        </a>
+        <a href="/engineer/manual-registration" style="display: flex; align-items: center; gap: 20px" id="manual-registration">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="39" viewBox="0 0 40 39" fill="none">
+                <path d="M11.875 24H18.675V30.8H21.325V24H28.125V21.325H21.325V14.525H18.675V21.325H11.875V24ZM18.7 7.67501L15 2.32501H0V37.675H40V7.67501H18.7ZM37.325 35H2.675V5.00001H13.6L17.3 10.325H37.3V35H37.325Z" fill="#6E6E6E"/>
+              </svg>
+            <p class="hideText">Adicionar Manuais</p>
+        </a>
+        <a href="/engineer/task-distribution" style="display: flex; align-items: center; gap: 20px" id="task-distribution">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <g clip-path="url(#clip0_6016_607)">
+                  <path d="M10.65 18.225L8.82504 20L16.975 27.925L40 5.14999L38.15 3.29999L16.95 24.35L10.65 18.225ZM36.025 15.95C36.3525 17.1587 36.5513 18.5512 36.575 19.9862V20C36.575 29.375 28.975 36.975 19.6 36.975C10.225 36.975 2.62504 29.375 2.62504 20C2.62504 10.625 10.225 3.02499 19.6 3.02499C23.035 3.02999 26.2275 4.06499 28.8863 5.83874L28.825 5.79999L30.75 3.89999C27.6538 1.70999 23.8013 0.399994 19.6425 0.399994C19.6275 0.399994 19.6125 0.399994 19.5975 0.399994H19.6C19.5788 0.399994 19.5525 0.399994 19.5275 0.399994C8.66129 0.399994 -0.147461 9.20874 -0.147461 20.075C-0.147461 30.9412 8.66129 39.75 19.5275 39.75C30.3938 39.75 39.2025 30.9412 39.2025 20.075C39.2025 17.83 38.8263 15.6725 38.1338 13.6612L38.175 13.8L36.025 15.95Z" fill="#6E6E6E"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_6016_607">
+                    <rect width="40" height="40" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
+            <p class="hideText">Distribuir Tarefas</p>
+        </a>
+        <a href="/engineer/create-model" style="display: flex; align-items: center; gap: 20px" id="create-model">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 49 40" fill="none">
+            <path d="M43.4737 23.7865V0.536499H5.13371V23.7865L0.303711 31.4065V39.8365H48.3037V31.4065L43.4737 23.7865ZM40.2637 3.7465V22.2565H8.34371V3.7465H40.2637ZM7.86371 25.4665H40.8637L43.8637 30.2965H4.80371L7.80371 25.4665H7.86371ZM3.51371 33.5065H18.3037V36.5065H3.51371V33.5065ZM30.5137 36.5065V33.5065H45.1537V36.5065H30.5137Z" fill="#6E6E6E"/>
+          </svg>
+            <p class="hideText">Adicionar Modelos</p>
+        </a>
+        <a href="/engineer/create-team" style="display: flex; align-items: center; gap: 20px" id="create-team">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 88 88" fill="none">
+            <g clip-path="url(#clip0_4128_799)">
+              <path d="M88 88H0L0.605 85.03C0.605 83.875 3.465 60.83 20.845 49.005L22.605 47.85L24.31 49.005C29.601 53.7048 36.608 56.5757 44.286 56.5757C51.6973 56.5757 58.4843 53.9 63.734 49.4615L63.69 49.4973L65.395 48.3423L67.155 49.4973C85.085 61.3223 87.395 84.3673 87.395 85.5223L88 88ZM6.38 82.115H81.07C78.9277 71.2057 73.315 61.864 65.4555 55.0495L65.395 55C59.389 59.4055 51.8512 62.051 43.6975 62.051C35.5438 62.051 28.006 59.4055 21.8955 54.9258L22 54.9973C14.3083 62.0208 8.77525 71.2938 6.44325 81.7713L6.38 82.1123V82.115ZM44 0C30.2995 0 19.195 11.1045 19.195 24.805C19.195 38.5055 30.2995 49.61 44 49.61C57.7005 49.61 68.805 38.5055 68.805 24.805C68.805 11.1045 57.7005 0 44 0ZM44 43.67C43.9835 43.67 43.9642 43.67 43.945 43.67C33.495 43.67 25.025 35.2 25.025 24.75C25.025 14.3 33.495 5.83 43.945 5.83C54.395 5.83 62.865 14.3 62.865 24.75C62.865 24.7693 62.865 24.7885 62.865 24.8078C62.8348 35.2137 54.4033 43.6398 44 43.67Z" fill="#6E6E6E"/>
+            </g>
+            <defs>
+              <clipPath id="clip0_4128_799">
+                <rect width="88" height="88" fill="white"/>
+              </clipPath>
+            </defs>
+          </svg>
+            <p class="hideText">Adicionar Equipes</p>
+        </a>
+        <a href="/engineer/update-team" style="display: flex; align-items: center; gap: 20px" id="update-team">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <path d="M19.25 24.5756L18.425 23.8745L17.675 24.7091C16.2938 26.1931 14.5187 27.0896 12.5875 27.0896C10.6562 27.0896 8.88125 26.1915 7.48375 24.6924L7.5 24.7091L6.75 23.8745L5.925 24.5756C2.77125 27.7139 0.6125 32.4313 0.1075 37.8349L0.1 37.9301L0 40H25.225L25.075 37.9968C24.5762 32.4714 22.4137 27.7272 19.2887 24.6123L19.25 24.5756ZM3.125 36.2941C3.7 33.0974 4.9625 30.3714 6.6875 28.3282L6.7 28.3148C8.36625 29.7905 10.4125 30.6686 12.6125 30.6686C14.8125 30.6686 16.8588 29.7905 18.565 28.2814L18.525 28.3148C20.2625 30.3714 21.525 33.0974 22.0837 36.189L22.1 36.2941H3.125ZM39.85 33.3228C39.3375 27.8241 37.1788 23.1066 34.0638 20.005L34.025 19.9683L33.2 19.2672L32.45 20.1018C31.0737 21.5692 29.3075 22.4556 27.3875 22.4556C25.4675 22.4556 23.7013 21.5692 22.3088 20.0835L22.325 20.1002L21.6 19.2989C21.3225 20.1202 21.0225 20.8213 20.6787 21.479L20.7 21.4356C21.925 22.5457 22.9713 23.8494 23.8525 25.3368L23.875 25.3752C24.9312 25.886 26.1513 26.1815 27.4225 26.1815C29.61 26.1815 31.6437 25.3067 33.34 23.806L33.3 23.8394C35.0375 25.896 36.3 28.622 36.8587 31.7135L36.875 31.8187H26.65C26.9575 32.8086 27.25 34.0122 27.4738 35.2508L27.5 35.4244H40L39.85 33.4212V33.3228ZM22.3 16.396C23.6037 18.1471 25.41 19.2304 27.405 19.2304C31.3812 19.2304 34.605 14.9253 34.605 9.61522C34.605 4.30515 31.3812 0 27.405 0C24.2975 0 21.65 2.62916 20.6413 6.31333L20.625 6.3801C21.7962 8.51348 22.5 11.1927 22.5 14.089V14.0923C22.4937 14.9119 22.43 15.7082 22.315 16.4778L22.325 16.396H22.3ZM27.3 3.64243C27.3225 3.64243 27.3487 3.64243 27.375 3.64243C29.86 3.64243 31.875 6.33336 31.875 9.65195C31.875 12.9705 29.86 15.6615 27.375 15.6615C24.89 15.6615 22.875 12.9705 22.875 9.65195C22.875 9.64026 22.875 9.62858 22.875 9.61689V9.61856C22.8888 6.31333 24.8975 3.64243 27.375 3.64243C27.4188 3.64243 27.4625 3.64076 27.5062 3.6441H27.5L27.3 3.64243ZM12.625 23.6741C15.0225 23.6675 17.1412 22.0866 18.435 19.6628L18.45 19.6344C19.2938 18.102 19.8 16.1773 19.8 14.094V14.0923C19.57 9.03096 16.44 5.04298 12.6125 5.04298C8.785 5.04298 5.655 9.03096 5.42625 14.0656L5.425 14.0923V14.094C5.425 16.1773 5.93125 18.102 6.78875 19.6611L6.775 19.6344C8.08625 22.0916 10.2125 23.6741 12.615 23.6741C12.6187 23.6741 12.6225 23.6741 12.625 23.6741ZM12.625 8.0828C15.1 8.10116 17.1 10.7854 17.1 14.0923C17.1 17.4109 15.085 20.1018 12.6 20.1018C10.115 20.1018 8.1 17.4109 8.1 14.0923C8.11375 10.7687 10.135 8.0828 12.625 8.0828Z" fill="#6E6E6E"/>
+            </svg>
+            <p class="hideText">Atualizar Equipes</p>
+        </a>
+    </ul>
+    <script>
+        const locationWindow = window.location.href
+        if (locationWindow.includes('dashboard')) {
+            document.getElementById('home').classList.add('selected-item')
+        } else if (locationWindow.includes('search')) {
+            document.getElementById('search').classList.add('selected-item')
+        } else if (locationWindow.includes('manual-registration')) {
+            document.getElementById('manual-registration').classList.add('selected-item')
+        } else if (locationWindow.includes('task-distribution')) {
+            document.getElementById('task-distribution').classList.add('selected-item')
+        } else if (locationWindow.includes('create-model')) {
+            document.getElementById('create-model').classList.add('selected-item')
+        } else if (locationWindow.includes('create-team')) {
+            document.getElementById('create-team').classList.add('selected-item')
+        } else if (locationWindow.includes('update-team')) {
+            document.getElementById('update-team').classList.add('selected-item')
+        }
+    </script>
+</div>

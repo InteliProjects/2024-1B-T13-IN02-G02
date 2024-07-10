@@ -1,0 +1,119 @@
+.blur-container {
+    /* From https://css.glass */
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+}
+
+.reporte-container {
+    background-color: white;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    padding-inline: 3rem;
+    padding-block: 2rem;
+    border-radius: 10px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    flex-direction: column;
+    display: flex;
+}
+
+.reporte-container h3 {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    text-align: center;
+}
+
+.reporte-container h4 {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    text-align: center;
+    font-size: 1.2rem;
+    margin-block: 1rem;
+    text-align: start;
+}
+
+.reporte-container h4 span {
+    color: red;
+}
+
+.reporte-container p {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 0.8rem;
+    text-align: end;
+    margin-bottom: 1rem;
+}
+
+.reporte-container textarea {
+    width: 100%;
+    height: 200px;
+    border: 1px solid #6E6E6E;
+    border-radius: 5px;
+    padding: 1rem;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    resize: none;
+}
+
+.reporte-container .send-button {
+    background-color: #0672CB;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding-inline: 2rem;
+    padding-block: 0.5rem;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    cursor: pointer;
+    align-self: center;
+}
+
+.blur-container.hidden {
+    display: none;
+}
+
+.blur-container #report-button-close,
+.blur-container #notifications-button-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.blur-container #report-button-close svg,
+.blur-container #notifications-button-close svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.reporte-container table {
+    width: 100%;
+    border: 1px solid #000000;
+    margin-block: 1rem;
+}
+
+.reporte-container table th {
+    border: 1px solid #000000;
+    padding: 0.5rem;
+}
+
+.reporte-container table td {
+    padding: 0.5rem;
+    border: 1px solid #D2D2D2;
+}

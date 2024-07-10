@@ -1,0 +1,363 @@
+<title>
+    <%- title = "Pesquisa" %>
+</title>
+<%- include('../components/header.ejs'); %>
+    <script>
+        function checkBoxVerify() {
+            const checkedCategories = Array.from(document.querySelectorAll(".categories input[type='checkbox']")).filter((checkbox) => checkbox.checked).map((checkbox) => checkbox.value);
+            const checkedStates = Array.from(document.querySelectorAll(".states input[type='checkbox']")).filter((checkbox) => checkbox.checked).map((checkbox) => checkbox.value);
+            const url = new window.URL(window.location.href);
+
+            if (checkedCategories.length === 0) {
+                url.searchParams.delete("category");
+            } else {
+                url.searchParams.set("category", checkedCategories.join(","));
+            }
+            if (checkedStates.length === 0) {
+                url.searchParams.delete("state");
+            } else {
+                url.searchParams.set("state", checkedStates.join(","));
+            }
+            url.searchParams.set("skip", 0);
+            window.history.pushState(null, "", url.toString());
+            getManual();
+        }
+    </script>
+    <div id="loading" class="spinner-border text-primary" role="status" style="display: none; position: fixed; left: 50%; top: 50%"></div>
+
+    <div style="margin-top: 80px; width: 100%; position: relative;" class="d-flex">
+        <%- include('../components/sidebar-adm.ejs'); %>
+            <div class="conteudo-pesquisa">
+                <div class="filters-search">
+                    <h2> <strong>PESQUISA</strong></h1>
+                        <h6><span id="results">0</span> resultados</h6>
+                        <div class="categories">
+                            <h4>Categorias</h4>
+                            <div class="check-container">
+                                <input type="checkbox" name="" id="comp" value="1" class="category-checkbox">
+                                <label for="comp">Computadores</label>
+                            </div>
+                            <div class="check-container">
+                                <input type="checkbox" name="" id="serv" value="2" class="category-checkbox">
+                                <label for="serv">Servidores</label>
+                            </div>
+                            <div class="check-container">
+                                <input type="checkbox" name="" id="sto" value="3" class="category-checkbox">
+                                <label for="sto">Storage</label>
+                            </div>
+                        </div>
+                </div>
+                <div class="search-content">
+                    <div class="search-bar">
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <svg style="position: absolute; z-index: 10; width: 24px; height: 24px; margin-left: 10px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                                <g clip-path="url(#clip0_4954_764)">
+                                    <path d="M24 22.89L16.05 15C17.34 13.4003 18.1208 11.3423 18.1208 9.10202C18.1208 9.06602 18.1208 9.03002 18.12 8.99477V9.00002V8.99927C18.12 4.02902 14.0903 -0.000732422 9.12002 -0.000732422C9.07802 -0.000732422 9.03602 -0.000732422 8.99402 1.75781e-05H9.00002C4.01852 0.0502676 -0.000732422 4.10027 -0.000732422 9.08927C-0.000732422 9.13652 1.75781e-05 9.18452 1.75781e-05 9.23177V9.22427C1.75781e-05 14.1945 4.02977 18.2243 9.00002 18.2243C9.07202 18.2265 9.15677 18.2273 9.24152 18.2273C11.454 18.2273 13.4738 17.4015 15.009 16.041L15 16.0493L22.95 23.9993L24.06 22.8893L24 22.89ZM9.00002 16.695C4.85777 16.695 1.50002 13.3373 1.50002 9.19502C1.50002 9.19052 1.50002 9.18527 1.50002 9.17927C1.50002 5.01902 4.84727 1.64027 8.99552 1.59002H9.00002C13.1423 1.59002 16.5 4.94777 16.5 9.09002C16.4918 13.2503 13.1513 16.6275 9.00602 16.695H9.00002Z" fill="#A0A0A0"/>
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_4954_764">
+                                        <rect width="24" height="24" fill="white"/>
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            <input type="text" placeholder="Pesquisa" id="searchInput" style="padding-left: 40px; flex-grow: 1;" onchange='(() => {
+                                const search = document.getElementById("searchInput");
+                                const url = new window.URL(window.location.href);
+                                url.searchParams.set("search", search.value);
+                                url.searchParams.set("skip", 0);
+                                window.history.pushState(null, "", url.toString());
+                                getManual();
+                            })()' />
+                        </div>
+                        <div class="ordenacao">
+                            <label for="ordenacao">Ordenar por:</label>
+                            <select id="ordenacao" name="ordenacao" onchange='(() => {
+                              const sort = document.getElementById("ordenacao");
+                              const url = new window.URL(window.location.href);
+                              url.searchParams.set("sort", sort.value);
+                              url.searchParams.set("skip", 0);
+                              window.history.pushState(null, "", url.toString());
+                              getManual();
+                          })()'>
+                                <option value="dataRecente">Data de postagem: Mais recente</option>
+                                <option value="dataAntiga">Data de postagem: Mais antiga</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="search-results">
+                        <div class="left-side side-container" id="leftSide">
+                        </div>
+                        <div class="right-side side-container" id="rightSide">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-5">
+                        <button class="btn-search d-none" id="btnMore" onclick='(() => {
+                    const search = document.getElementById("btnMore");
+                    const url = new window.URL(window.location.href);
+                    const skip = new URLSearchParams(window.location.search).get("skip") || 0;
+                    url.searchParams.set("skip", parseInt(skip) + 10);
+                    window.history.pushState(null, "", url.toString());
+                    getManual(true);
+                })()'>VER MAIS</button>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+        
+        .conteudo-pesquisa {
+            width: 100%;
+            height: 100%;
+            padding: 3rem;
+            display: flex;
+        }
+        
+        .conteudo-pesquisa .filters-search {
+            margin-right: 2rem;
+        }
+        
+        .conteudo-pesquisa .filters-search .states {
+            margin-top: 1rem;
+        }
+        
+        .conteudo-pesquisa h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+        
+        .conteudo-pesquisa h6 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+        
+        .conteudo-pesquisa .check-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 300;
+            margin-left: 1rem;
+        }
+        
+        .conteudo-pesquisa .filters-search h4 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+        
+        .search-content {
+            width: 100%;
+        }
+        
+        .search-content .search-bar {
+            display: flex;
+            flex-direction: row;
+            gap: .5rem;
+            align-items: center;
+            width: 130%;
+            flex-wrap: nowrap;
+        }
+        
+        .search-content .search-bar div {
+            width: 100%;
+        }
+        
+        .search-content .search-bar div input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #D2D2D2;
+            border-radius: 4px;
+        }
+        
+        .search-content .search-bar .ordenacao label {
+            font-size: 1rem;
+            font-weight: 300;
+        }
+        
+        .search-content .search-bar button {
+            color: #F5F6F7;
+            background-color: #0063B8;
+            border: none;
+            position: absolute;
+            border-radius: 4px;
+            padding: 4px;
+            padding-inline: 16px;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .search-content .search-results {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        
+        .search-content .search-results .side-container {
+            width: 48%;
+        }
+        
+        #ordenacao {
+            border: none;
+        }
+        
+        .ordenacao {
+            margin-left: 2rem;
+        }
+        
+        .btn-search {
+            border: none;
+            background-color: #008CBA;
+            color: white;
+            padding: 10px 60px;
+            font-size: 2rem;
+            cursor: pointer;
+            border-radius: 3px;
+            font-family: "Roboto";
+            font-weight: 400;
+        }
+    </style>
+    <script>
+        activeLoading();
+
+        function activeLoading() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+        }
+
+        function disableLoading() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'none';
+        }
+
+        async function getManual(skipt = false) {
+            const searchParams = new URLSearchParams(window.location.search).get("search") || "";
+            const skip = new URLSearchParams(window.location.search).get("skip") || 0;
+            const limit = 10;
+            document.getElementById("searchInput").value = searchParams;
+            const ordenacao = new URLSearchParams(window.location.search).get("sort") || "dataRecente";
+            const categorias = new URLSearchParams(window.location.search).get("category") || "";
+            const token = localStorage.getItem("access_token");
+            const leftSide = document.querySelector(".left-side");
+            const rightSide = document.querySelector(".right-side");
+            document.getElementById("results").innerHTML = 0;
+            if (!skipt) {
+                leftSide.innerHTML = "";
+                rightSide.innerHTML = "";
+            }
+            activeLoading();
+
+            const response = await fetch(`/api/manuals?search=${searchParams}${categorias ? `&category=${categorias}` : ""}${ordenacao === "dataRecente" ? "&sort=DESC" : "&sort=ASC"}&skip=${skip}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token,
+            }
+        });
+        if (response.status !== 200) {
+            disableLoading();
+            alert("Erro ao buscar manuais");
+            return;
+        }
+        const data = await response.json();
+
+        if(data.length == 10){
+          document.getElementById("btnMore").classList.remove("d-none");
+        }else{
+          document.getElementById("btnMore").classList.add("d-none");
+        }
+        data.forEach((manual, index) => {
+            const side = index % 2 === 0 ? leftSide : rightSide;
+            const manualCard = document.createElement('div');
+            manualCard.classList.add('manualCard');
+            manualCard.innerHTML = `
+                <div class="title-line">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <g clip-path="url(#clip0_4505_54)">
+                  <path d="M29.8 21.48V4.92004H2.2V21.48H0L0.82 27.08H31.18L32 21.48H29.8ZM4.32 7.04004H27.68V21.48H4.32V7.04004ZM29.34 25.04H2.66L2.46 23.7H29.54L29.34 25.04Z" fill="#0E0E0E"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_4505_54">
+                    <rect width="32" height="32" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
+              <h5>${manual.model_name}: ${manual.name}</h5>
+            </div>
+            <div>
+              <div class="lines">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <g clip-path="url(#clip0_4505_50)">
+                    <path d="M16.3375 0L2.3 14.0375L0.225 19.3625L0 20L0.6375 19.775L5.975 17.6875L20 3.6625L16.3375 0ZM2.3375 17.6625L3.4125 14.8875L5.125 16.575L2.3375 17.6625ZM6.0875 15.65L4.325 13.9L14.325 3.9L16.0875 5.6375L6.0875 15.6375V15.65ZM15.3 2.95L16.3375 1.9125L18.0875 3.6625L17.0625 4.6875L15.3 2.95Z" fill="#0E0E0E"/>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_4505_50">
+                      <rect width="20" height="20" fill="white"/>
+                    </clipPath>
+                  </defs>
+                </svg>
+                <p>Versão: ${manual.version}</p>
+              </div>
+              <div class="lines">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <g clip-path="url(#clip0_4505_48)">
+                    <path d="M6.7125 8.275H9.2125V9.6H6.7125V8.275ZM10.8125 8.275H13.3125V9.6H10.8125V8.275ZM14.9 8.275H17.4V9.6H14.9V8.275ZM2.625 11.825H5.125V13.15H2.625V11.825ZM6.7125 11.825H9.2125V13.15H6.7125V11.825ZM10.8125 11.825H13.3125V13.15H10.8125V11.825ZM14.9 11.825H17.4V13.15H14.9V11.825ZM2.625 15.3625H5.125V16.7H2.625V15.3625ZM6.7125 15.3625H9.2125V16.7H6.7125V15.3625ZM14.35 1.5125V0H13.0125V1.5125H6.9125V0H5.5875V1.5125H0V20H20V1.5125H14.35ZM5.6 2.8375V4.0125H6.9125V2.8375H13.0125V4.0125H14.35V2.8375H18.6625V5H1.3375V2.8375H5.6ZM1.3375 18.6625V6.3125H18.6625V18.6625H1.3375Z" fill="#0E0E0E"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_4505_48">
+                    <rect width="20" height="20" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
+              <p>Data de publicação:  ${new Date(parseInt(manual.createdAt)).toLocaleDateString('pt-BR')}</p>
+            </div>
+          <div class="lines">
+            <a href="/engineer/manual/${manual.id}">
+              Abrir manual
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none">
+                <path d="M9.23625 1.86121L8.44875 2.76121L15.4913 8.90371H0V10.0962H15.4913L8.44875 16.25L9.23625 17.15L18 9.49996L9.23625 1.86121Z" fill="#0672CB"/>
+              </svg>
+            </a>
+          </div>
+            `;
+            side.innerHTML += manualCard.outerHTML;
+        });
+        var elements = document.getElementsByClassName("manualCard");
+        var n = elements.length;
+        document.getElementById("results").innerHTML = n;
+        disableLoading()
+    }
+
+    document.querySelectorAll('.category-checkbox').forEach(checkbox => {
+      checkbox.addEventListener('change', () => {
+          const url = new window.URL(window.location.href);
+          let currentCategories = url.searchParams.get("category");
+          let categoriesArray = currentCategories ? currentCategories.split(',') : [];
+
+          if (checkbox.checked) {
+              if (!categoriesArray.includes(checkbox.value)) {
+                  categoriesArray.push(checkbox.value);
+              }
+          } else {
+
+              categoriesArray = categoriesArray.filter(cat => cat !== checkbox.value);
+          }
+          if (categoriesArray.length > 0) {
+              url.searchParams.set("category", categoriesArray.join(','));
+          } else {
+              url.searchParams.delete("category");
+          }
+
+          url.searchParams.set("skip", 0);
+          window.history.pushState(null, "", url.toString());
+          getManual();
+      });
+  });
+
+
+    getManual();
+    </script>

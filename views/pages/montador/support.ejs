@@ -1,0 +1,117 @@
+<title>
+    <%- title = "Suporte" %>
+</title>
+<link rel="stylesheet" href="/styles/support.css" />
+<%- include('../components/header.ejs'); %>
+    <div style="margin-top: 80px; width: 100%; position: relative;" class="d-flex">
+        <%- include('../components/sidebar.ejs'); %>
+            <div id="loading" class="spinner-border text-primary" role="status" style="display: none; position: fixed; left: 50%; top: 50%; z-index: 1000;"></div>
+            <div class="conteudo-manual-registration w-100" style="padding-inline: 3rem; padding-block: 2rem">
+                <div class="mt-4">
+                    <h1 class="display-5 mb-4">Solicitação de Suporte</h1>
+
+                    <!-- Link to Select2 CSS -->
+                    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+                    <!-- jQuery -->
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+                    <!-- Select2 JS -->
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+                    <form id="supportForm">
+                        <div class="mb-3">
+                            <label for="gestor" class="form-label">Gestor <span class="text-danger">*</span></label><br>
+                            <div class="input-wrapper" style="width: 20%;">
+                                <select id="gestor" name="gestor_id" class="form-control" required>
+              <!-- Opções de gestor serão adicionadas aqui -->
+            </select>
+                                <div class="icon">
+                                    <svg class="icone" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <path d="M19.2499 10.3263L11.7287 18.9338V0L10.2712 0V18.9338L2.7499 10.3263L1.6499 11.2887L10.9999 22L20.3362 11.2887L19.2499 10.3263Z" fill="#0E0E0E"/>
+              </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="descricao" class="form-label">Descrição <span class="text-danger">*</span></label>
+                            <textarea id="descricao" name="description" rows="4" class="form-control" maxlength="250" required></textarea>
+                            <p class="form-text text-start">0/250</p>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary py-3 mt-5" style="width: 30%;">Enviar notificação</button>
+                    </form>
+
+                    <script>
+                        activeLoading();
+
+                        function activeLoading() {
+                            const loading = document.getElementById('loading');
+                            loading.style.display = 'block';
+                        }
+
+                        function disableLoading() {
+                            const loading = document.getElementById('loading');
+                            loading.style.display = 'none';
+                        }
+
+                        $(document).ready(function() {
+                            $("#gestor").select2({
+                                placeholder: "Selecione um gestor",
+                                allowClear: true,
+                                closeOnSelect: false
+                            });
+
+                            // Puxar os admins (gestores) e preencher o select
+                            fetch('/users/admins')
+                                .then(response => response.json())
+                                .then(data => {
+                                    disableLoading()
+                                    data.forEach(admin => {
+                                        const option = new Option(admin.name, admin.id, false, false);
+                                        $("#gestor").append(option).trigger('change');
+                                    });
+                                });
+
+                            const descricao = document.getElementById('descricao');
+                            const formText = descricao.nextElementSibling;
+
+                            descricao.addEventListener('input', function() {
+                                formText.textContent = `${descricao.value.length}/250`;
+                            });
+
+                            // Submeter o formulário
+                            document.getElementById('supportForm').addEventListener('submit', function(e) {
+                                e.preventDefault();
+
+                                const gestorId = document.getElementById('gestor').value;
+                                const descricao = document.getElementById('descricao').value;
+                                const userId = 1; // Supomos que o ID do usuário esteja disponível. Troque isso pela forma correta de obter o ID do usuário autenticado.
+
+                                fetch('/notifications/support', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({
+                                            message: descricao,
+                                            senderId: userId,
+                                            receiverId: gestorId
+                                        })
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.error) {
+                                            alert('Erro ao enviar notificação: ' + data.error);
+                                        } else {
+                                            alert('Notificação enviada com sucesso!');
+                                            window.location.href = '/mounter/homepage';
+                                        }
+                                    });
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+    </div>

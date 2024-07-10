@@ -1,0 +1,124 @@
+.manual-content{
+    padding-block: 2rem;
+    width: 100%;
+}
+
+.icon-bar {
+  display: flex;
+  padding-inline: 48px;
+  gap: 10px;
+  margin-top: 24px;
+  border: 2px solid black;
+  border-left-width: 0;
+  border-right-width: 0;
+  width: 100%;
+  padding-block: 18px;
+}
+
+.icon-bar div {
+  text-align: center;
+}
+
+.icon-bar i {
+  display: block;
+  font-size: 24px;
+}
+
+.card-container {
+  display: flex;
+  justify-content: normal;
+  padding-inline: 32px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 30%;
+  margin-right: 32px;
+  margin-top: 32px;
+}
+.header-manual-content{
+  display: flex; 
+  flex-direction: row; 
+  padding-inline: 32px; 
+  align-items: center;
+}
+
+.button-manual-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  min-width: 10%;
+}
+.menu-selection {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding-inline-end: 36px;
+  position: relative;
+  border-radius: 4px;
+  padding-block: 0.5rem;
+}
+.menu-selection:hover {
+  cursor: pointer;
+  background-color: rgba(210, 210, 210, 0.5);
+}
+.menu-selection.active::before {
+  content: "";
+  display: block;
+  height: 100%;
+  width: 8px;
+  background-color: rgba(148, 220, 247, 0.4);
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+.menu-selection p {
+  margin: 0;
+}
+.header-text-content{
+  display: flex; 
+  flex-direction: column; 
+  margin-right: 112px;
+}
+.header-text-content h1 {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 2rem;
+}
+.header-text-content p {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+
+#report-button-open p, #addToFavorites p, #attButton p {
+  margin-top: 1rem;
+}
+
+#fileTitle {
+  margin-top: 1rem;
+}
+
+#statusManual {
+
+display: flex;
+justify-content: center;
+align-items: center;
+width: 99px;
+height: 25px;
+background: rgba(148, 220, 247, 0.3);
+border: 1px solid #0E0E0E;
+border-radius: 5px;
+margin-left: 20px;
+
+}
+
+#adminTitleManual {
+  display: flex;
+  align-items: center;
+}

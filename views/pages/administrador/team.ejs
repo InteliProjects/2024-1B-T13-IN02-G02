@@ -1,0 +1,145 @@
+<title>
+    <%- title = "Cadastrar Time" %>
+</title>
+<%- include('../components/header.ejs'); %>
+    <link rel="stylesheet" href="/styles/team.css" />
+    <div style="margin-top: 80px; width: 100%; position: relative" class="d-flex">
+        <%- include('../components/sidebar-adm.ejs'); %>
+            <div class="" style="padding-inline: 3rem; padding-block: 2rem;">
+                <div class="mt-4">
+                    <h1 class="display-5 mb-4">Cadastro de novas equipes</h1>
+
+                    <!-- Link to Select2 CSS -->
+                    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+                    <!-- jQuery -->
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+                    <!-- Select2 JS -->
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+                    <form onsubmit="createTeam(event)">
+                        <div class="form-group mb-3">
+                            <label for="name" class="form-label">Título da Equipe<span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="name" class="form-control" id="name" name="name" required>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="equipes" class="form-label">Selecione os Montadores desta Equipe <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <select id="montadores" name="montadores[]" class="form-control" multiple="multiple" required>
+                                  <% montadores.forEach(function(montador) { %>
+                                    <option value="<%= montador.id %>"><%= montador.name %></option>
+                                  <% }); %>
+                            </select>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icone-editar" width="20" height="22" viewBox="0 0 20 22" fill="none">
+                              <path d="M18.2504 10.3263L10.7291 18.9338V0L9.27164 0V18.9338L1.75039 10.3263L0.650391 11.2887L10.0004 22L19.3366 11.2887L18.2504 10.3263Z" fill="#0E0E0E"/>
+                            </svg>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group mb-3">
+                            <label for="gestor" class="form-label">Gestor desta Equipe<span class="text-danger">*</span></label><br>
+                            <div class="input-group" style="width: 50%;">
+                                <select id="gestor" name="gestor" class="form-control" required>
+                                  <% engenheiros.forEach(function(engenheiro) { %>
+                                    <option value="<%= engenheiro.id %>"><%= engenheiro.name %></option>
+                                  <% }); %>
+            </select>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icone-editar" width="20" height="22" viewBox="0 0 20 22" fill="none">
+                                    <path d="M18.2504 10.3263L10.7291 18.9338V0L9.27164 0V18.9338L1.75039 10.3263L0.650391 11.2887L10.0004 22L19.3366 11.2887L18.2504 10.3263Z" fill="#0E0E0E"/>
+                                  </svg>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="description" class="form-label">Descrição <span class="text-danger">*</span></label>
+                            <textarea id="description" name="description" class="form-control" maxlength="250" required style="height: 150px;"></textarea>
+                            <p class="form-text text-start" id="charCount">0/250</p>
+                        </div>
+
+                        <div>
+                            <button type="submit" class="btn btn-primary mt-5 py-3 px-5">ENVIAR</button>
+                        </div>
+                    </form>
+
+                    <script>
+                        $(document).ready(function() {
+                            $("#montadores").select2({
+                                placeholder: "Selecione",
+                                allowClear: true,
+                                closeOnSelect: false
+                            });
+                            $("#gestor").select2({
+                                placeholder: "Selecione",
+                                allowClear: true,
+                                closeOnSelect: false
+                            });
+                        });
+                    </script>
+
+
+                    <script>
+                        async function createTeam(event) {
+                            event.preventDefault();
+
+                            var montadores = document.getElementById('montadores');
+                            const montadoresOptions = montadores.selectedOptions;
+                            var montadores = Array.from(montadoresOptions).map(option => option.value).toString();
+
+                            const gestor = document.getElementById('gestor').value;
+                            const name = document.getElementById("name").value;
+                            const description = document.getElementById("description").value;
+
+                            const token = localStorage.getItem("access_token");
+
+                            try {
+                                const response = await fetch('/api/update-team', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        "Authorization": token
+                                    },
+                                    body: JSON.stringify({
+                                        montadores,
+                                        gestor,
+                                        name,
+                                        description
+                                    }),
+                                });
+
+                                if (!response.ok) {
+                                    const errorDetails = await response.json();
+                                    throw new Error(`Erro do servidor: ${errorDetails.message || response.statusText}`);
+                                }
+
+                                const result = await response.json();
+                                alert("Equipe cadastrada com Sucesso.");
+                            } catch (error) {
+                                console.error('Erro:', error);
+                                alert('Erro ao criar a Equipe. Detalhes: ' + error.message);
+                            }
+                        }
+
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const textarea = document.getElementById('description');
+                            const charCount = document.getElementById('charCount');
+
+                            textarea.addEventListener('input', () => {
+                                const currentLength = textarea.value.length;
+                                charCount.textContent = `${currentLength}/250`;
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+    </div>
+
+    <style>
+        .select2-container--default .select2-selection--multiple {
+            overflow-y: auto;
+        }
+    </style>

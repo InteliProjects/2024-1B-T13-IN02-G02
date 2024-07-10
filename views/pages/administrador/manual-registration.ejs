@@ -1,0 +1,223 @@
+<%- title = "Cadastrar Manual" %>
+    <%- include('../components/header.ejs'); %>
+        <link rel="stylesheet" href="/styles/manual-registration.css" />
+        <div style="margin-top: 80px; width: 100%; position: relative;" class="d-flex">
+            <%- include('../components/sidebar-adm.ejs'); %>
+                <div id="loading" class="spinner-border text-primary" role="status" style="display: none; position: fixed; left: 50%; top: 50%; z-index: 1000;"></div>
+                <div class="conteudo-manual-registration w-100" style="padding-inline: 3rem; padding-block: 2rem">
+                    <div class="mt-4">
+                        <h1 class="display-5 mb-4">Cadastro de novos Manuais</h1>
+
+                        <!-- Link to Select2 CSS -->
+                        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+                        <!-- jQuery -->
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+                        <!-- Select2 JS -->
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+                        <form onsubmit="createManual(event)" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="modelo" class="form-label">Modelo: <span class="text-danger">*</span></label><br>
+                                <div class="input-wrapper" style="width: 20%;">
+                                    <select id="modelo" name="model_id" class="form-control">
+                                  <% models.forEach(function(model) { %>
+                                    <option value="<%= model.id %>"><%= model.name %></option>
+                                  <% }); %>
+                               </select>
+                                    <div class="icon">
+                                        <svg class="icone" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                                    <path d="M19.2499 10.3263L11.7287 18.9338V0L10.2712 0V18.9338L2.7499 10.3263L1.6499 11.2887L10.9999 22L20.3362 11.2887L19.2499 10.3263Z" fill="#0E0E0E"/>
+                                  </svg>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="mb-3">
+                                <label for="nomeManual" class="form-label">Nome do Manual: <span class="text-danger">*</span></label
+          >
+          <input
+            type="text"
+            id="nomeManual"
+            name="name"
+            class="form-control"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="versaoMaterial" class="form-label"
+            >Versão do Material: <span class="text-danger">*</span></label
+          >
+          <input
+            required
+            type="text"
+            id="versaoMaterial"
+            name="version"
+            class="form-control"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="ativoDesativado" class="form-label"
+            >Ativo / Desativado <span class="text-danger">*</span></label
+          >
+          <br>
+          <div class="input-wrapper" style="width: 20%;">
+          <select id="ativoDesativado" name="active" class="form-select" required>
+            <option value="1">Ativo</option>
+            <option value="0">Desativado</option>
+          </select>
+            <div class="icon">
+                <svg class="icone" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <path d="M19.2499 10.3263L11.7287 18.9338V0L10.2712 0V18.9338L2.7499 10.3263L1.6499 11.2887L10.9999 22L20.3362 11.2887L19.2499 10.3263Z" fill="#0E0E0E"/>
+              </svg>
+            </div>
+        </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="descricao" class="form-label"
+            >Descrição <span class="text-danger">*</span></label
+          >
+          <textarea
+            id="descricao"
+            name="description"
+            rows="4"
+            class="form-control"
+            required
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label"
+            >Anexar arquivos <span class="text-danger">*</span></label
+          >
+          <div class="mt-1" style="display: block;">
+            <button type="button" class="btn btn-outline-primary" onclick="document.getElementById('files').click()">
+              <svg
+                width="21"
+                height="21"
+                viewBox="0 0 21 21"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="me-2"
+              >
+                <g clip-path="url(#clip0_4036_664)">
+                  <path
+                    d="M19.5956 10.5V19.6875H1.40438V10.5H0V21H21V10.5H19.5956ZM9.80437 2.86125V16.065H11.2087V2.86125L15.8288 7.95375L16.8656 7.00875L10.5 0L4.1475 7.00875L5.25 7.95375L9.80437 2.86125Z"
+                    fill="#0163B8"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_4036_664">
+                    <rect width="21" height="21" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+              <span>Procurar Arquivos</span>
+            </button>
+              <input type="file" id="files" name="files[]" multiple style="display: none;" onchange="displayFiles()">
+              <div id="fileList" style="margin-top: 20px;"></div>
+                        </div>
+                </div>
+
+                <div>
+                    <button type="submit" class="btn btn-primary py-3 mt-5" style="width: 30%;">
+            ENVIAR
+          </button>
+                </div>
+                </form>
+
+                <script>
+                  $(document).ready(function() {
+                    $("#modelo").select2({
+                        placeholder: "Selecione",
+                        allowClear: true,
+                        closeOnSelect: false
+                    });
+                });
+                </script>
+
+                <script>
+                  async function createManual(event) {
+                    event.preventDefault();
+                    activeLoading()
+
+                    const model_id = document.getElementById('modelo').value;
+                    const name = document.getElementById('nomeManual').value;
+                    const version = document.getElementById('versaoMaterial').value;
+                    const active = document.getElementById('ativoDesativado').value;
+                    const description = document.getElementById('descricao').value;
+                    const files = document.getElementById('files').files;
+                    const token = localStorage.getItem("access_token");
+
+                    const formData = new FormData();
+
+                    formData.append('name', name);
+                    formData.append('description', description);
+                    formData.append('active', active);
+                    formData.append('version', version);
+                    formData.append('model_id', model_id);
+                    for (let i = 0; i < files.length; i++) {
+                      formData.append('files', files[i]);
+                    }
+
+                    try {
+                      const response = await fetch('/api/create-manual', {
+                        method: 'POST',
+                        headers: {
+                          "Authorization": token
+                        },
+                        body: formData
+                      });
+
+                      const newManual = await response.json();
+
+                      if (response.ok) {
+                        disableLoading()
+                        alert("Manual Cadastrado com Sucesso.");
+                        window.location.href = `/engineer/manual/${newManual.manualId}`;
+                      } else {
+                        disableLoading()
+                        const errorData = await response.json();
+                        alert(errorData.error);
+                      }
+                    } catch (error) {
+                      disableLoading()
+                      console.error('Erro:', error);
+                      alert(error);
+                    }
+                  }
+
+                  function displayFiles() {
+                    const fileInput = document.getElementById('files');
+                    const fileList = document.getElementById('fileList');
+                    fileList.innerHTML = '';
+
+                    const files = fileInput.files;
+                    for (let i = 0; i < files.length; i++) {
+                      fileList.innerHTML += `${files[i].name}<br>`;
+                    }
+
+                  }
+
+                  function activeLoading() {
+                      const loading = document.getElementById('loading');
+                      loading.style.display = 'block';
+                  }
+
+                  function disableLoading() {
+                      const loading = document.getElementById('loading');
+                      loading.style.display = 'none';
+                  }
+
+                </script>
+
+
+            </div>
+    </div>
+    </div>

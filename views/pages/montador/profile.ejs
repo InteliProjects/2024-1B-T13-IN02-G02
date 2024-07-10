@@ -1,0 +1,110 @@
+<title>
+    <%- title = "Perfil" %>
+</title>
+<%- include('../components/header.ejs'); %>
+    <div style="margin-top: 80px; width: 100%; position: relative;" class="d-flex">
+        <%- include('../components/sidebar.ejs'); %>
+            <div id="loading" class="spinner-border text-primary" role="status" style="display: none; position: fixed; left: 50%; top: 50%; z-index: 1000;"></div>
+            <div class="main-content col-md-9 ms-sm-auto col-lg-10">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-2 mb-3">
+                    <h1 style="font-weight: 400;">Perfil</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <button type="button" onclick="logout()" class="btn btn-sm  d-flex align-items-center" id="signout-btn" style="border:1px solid #0672CB">
+          <i class="mr-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" class="me-2">
+              <g clip-path="url(#clip0_4139_2480)">
+                <path d="M15 5L14.0625 5.9375L17.5 9.3625H6.85V10.6875H17.5L14.1125 14.0875L15 15L20 10L15 5ZM13.325 18.6625H1.325V1.3375H13.325V2.75H14.65V0H0V20H14.65V17.25H13.325V18.6625Z" fill="#0E0E0E" fill-opacity="0.7"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_4139_2480)">
+                  <rect width="20" height="20" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+          </i>
+          Sair
+        </button>
+                    </div>
+                </div>
+                <div class="mb-4" style="max-width: 800px; background-color: white;">
+                    <div class="row g-0">
+                        <div class="col-md-4 d-flex flex-column align-items-center">
+                            <img id="user-profile-photo" src="https://i.ibb.co/HnWFr3v/NO-PROFILE-PIC-5.jpg" class="img-fluid rounded-start mb-3" alt="Profile picture">
+                        </div>
+                        <div class="col-md-8" style="padding-left: 2rem;">
+                            <div class="card-body">
+                                <h2 id="user-name" class="card-title">Carregando...</h2>
+                                <p id="user-email" class="card-text my-3">E-mail: Carregando...</p>
+                                <p id="user-team" class="card-text my-3">Equipe: Carregando...</p>
+                                <br>
+                                <a href="/change-password" class="card-link" id="change-password-link">Trocar senha</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <script>
+        logout = () => {
+            localStorage.removeItem('access_token');
+            window.location.href = '/login';
+        }
+
+        activeLoading();
+
+        function activeLoading() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+        }
+
+        function disableLoading() {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'none';
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            let token = localStorage.getItem('access_token'); // Obtendo o token da chave correta
+            if (token) {
+                fetch('/profile', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': token,
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            if (response.status === 403) {
+                                throw new Error('Forbidden');
+                            }
+                            throw new Error('Erro na requisição');
+                        }
+                        return response.json();
+                    })
+                    .then(user => {
+                        disableLoading();
+                        if (user.isAdmin) {
+                            window.location.href = '/engineer/profile'
+                        }
+                        document.getElementById('user-name').innerText = user.name;
+                        document.getElementById('user-email').innerText = `E-mail: ${user.email}`;
+                        document.getElementById('user-team').innerText = `Equipe: ${user.team ? user.team.name : 'N/A'}`;
+                        if (user.profile_photo) {
+                            document.getElementById('user-profile-photo').src = user.profile_photo;
+                        }
+                        document.getElementById('change-password-link').style.display = 'block';
+                    })
+                    .catch(error => {
+                        console.error('Erro ao buscar perfil do usuário:', error);
+                        document.getElementById('user-name').innerText = 'Erro ao carregar';
+                        document.getElementById('user-email').innerText = 'Erro ao carregar';
+                        document.getElementById('user-team').innerText = 'Erro ao carregar';
+                    });
+            } else {
+                console.error('Token não encontrado');
+                window.location.href = '/login'; // Redirecionar para a página de login se o token não for encontrado
+            }
+        });
+    </script>

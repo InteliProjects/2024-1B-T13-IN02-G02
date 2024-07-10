@@ -1,0 +1,57 @@
+
+body {
+    display: flex;
+    min-height: 100vh;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+}
+.form-control[readonly] {
+    background-color: white;
+    border: 1.5px solid #ced4da;
+    width: 500px;
+    height: 52px;
+}
+.icone-editar {
+    position:absolute;
+    right: 2rem;
+    top: 25%;
+}
+.input-group {
+    position: relative;
+}
+h2 {
+    color: #000;
+    font-family: Roboto;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 56px; /* 116.667% */
+}
+h3 {
+    color: #000;
+    font-family: Roboto;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;    
+}
+h4{
+    color: #000;
+    font-family: Roboto;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px; /* 150% */
+}
+.btn-submit {
+    display: inline-flex;
+    padding: 16px 112px;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    border-radius: 3px;
+    background: #0063B8;
+}

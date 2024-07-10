@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%- title = "Dashboard" %></title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body>
+    <%- include('../components/header.ejs'); %>
+    <div
+      style="margin-top: 50px; width: 100%; position: relative"
+      class="d-flex"
+    >
+      <%- include('../components/sidebar-adm.ejs'); %>
+      <div
+        id="loading"
+        class="spinner-border text-primary"
+        role="status"
+        style="
+          display: none;
+          position: fixed;
+          left: 50%;
+          top: 50%;
+          z-index: 1000;
+        "
+      ></div>
+      <div class="container-fluid">
+        <div class="row">
+          <main role="main" class="">
+            <div class="content">
+              <div class="row">
+                <!-- Primeiro filtro -->
+                <div class="col-md-6">
+                  <div class="card">
+                    <div id="filter01" class="card-body">
+                      <h5 class="card-title">Equipes:</h5>
+                      <select class="form-control" id="teamSelect"></select>
+                    </div>
+                  </div>
+                </div>
+                <!-- Segundo filtro -->
+                <div class="col-md-6">
+                  <div class="card">
+                    <div id="filter02" class="card-body">
+                      <h5 class="card-title">Montadores:</h5>
+                      <select class="form-control" id="montadorSelect"></select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Feito por montador:</h5>
+                      <div class="chart-container">
+                        <canvas id="barChart1"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">A fazer por montador:</h5>
+                      <div class="chart-container">
+                        <canvas id="barChart2"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 id="teamName" class="card-title">Dados da equipe:</h5>
+                      <div class="chart-container">
+                        <canvas id="pieChart1"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 id="montadorName" class="card-title">
+                        Montador selecionado:
+                      </h5>
+                      <div class="chart-container">
+                        <canvas id="pieChart2"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .card {
+        width: 100%;
+        margin-top: 20px;
+      }
+    </style>
+
+    <script>
+      const teamSelect = document.getElementById("teamSelect");
+      const montadorSelect = document.getElementById("montadorSelect");
+      const montadorName = document.getElementById("montadorName");
+
+      function activeLoading() {
+        const loading = document.getElementById("loading");
+        loading.style.display = "block";
+      }
+
+      function disableLoading() {
+        const loading = document.getElementById("loading");
+        loading.style.display = "none";
+      }
+
+      function teamsFilter() {
+        fetch("/api/update-team")
+          .then((response) => {
+            if (!response) {
+              throw new Error("Falha ao encontrar os times");
+            }
+            return response.json();
+          })
+          .then((teams) => {
+            for (let i = 0; i < teams.length; i++) {
+              teamSelect.innerHTML += `<option value="${teams[i].id}">${teams[i].name}</option>`;
+            }
+
+            for (let i = 0; i < teams[0].users.length; i++) {
+              montadorSelect.innerHTML += `<option id='${
+                teams[0].users[i].id
+              }' value="${i}">M.${i + 1} | ${teams[0].users[i].name}</option>`;
+            }
+
+            function updateMontadores() {
+              montadorSelect.innerHTML = "";
+              for (let i = 0; i < teams.length; i++) {
+                if (teams[i].id == teamSelect.value) {
+                  for (let j = 0; j < teams[i].users.length; j++) {
+                    montadorSelect.innerHTML += `<option id='${
+                      teams[i].users[j].id
+                    }' value="${j}">M.${j + 1} | ${
+                      teams[i].users[j].name
+                    }</option>`;
+                  }
+                  break;
+                }
+              }
+            }
+
+            function updateProfileLink() {
+              const mounterId =
+                montadorSelect.options[montadorSelect.selectedIndex].id;
+              const mounterName =
+                montadorSelect.options[montadorSelect.selectedIndex].text;
+              montadorName.innerHTML = `Montador selecionado: <a href="/engineer/profile/mounter/${mounterId}">${mounterName}</a>`;
+            }
+
+            function updateGraphs() {
+              const fetchGraph01 = fetch(
+                `/api/dashboardData/${teamSelect.value}`
+              ).then((responseGraph01) => {
+                if (!responseGraph01) {
+                  throw new Error("Falha ao carregar grafico 01");
+                }
+                return responseGraph01.json();
+              });
+
+              const fetchGraph02 = fetch(
+                `/api/dashboardData02/${teamSelect.value}`
+              ).then((responseGraph02) => {
+                if (!responseGraph02) {
+                  throw new Error("Falha ao carregar grafico 02");
+                }
+                return responseGraph02.json();
+              });
+
+              const fetchGraph03 = fetch(
+                `/api/dashboardData03/${teamSelect.value}`
+              ).then((responseGraph03) => {
+                if (!responseGraph03) {
+                  throw new Error("Falha ao carregar grafico 03");
+                }
+                return responseGraph03.json();
+              });
+
+              fetchGraph01
+                .then((data) => {
+                  const names = [];
+                  const numbers = [];
+
+                  for (let i = 0; i < data.length; i++) {
+                    if (i % 2 === 0) {
+                      names.push(data[i]);
+                    } else {
+                      numbers.push(data[i]);
+                    }
+                  }
+
+                  fetchGraph02.then((data02) => {
+                    fetchGraph03.then((data03) => {
+                      function updateGraph04() {
+                        const graphData = [
+                          numbers[montadorSelect.value],
+                          100 - numbers[montadorSelect.value],
+                        ];
+                        pieChart2.data.datasets[0].data = graphData;
+                        pieChart2.update();
+                      }
+
+                      updateGraph04();
+                      montadorSelect.addEventListener("change", updateGraph04);
+
+                      barChart1.data.labels = names;
+                      lineChart1.data.labels = names;
+                      barChart1.data.datasets[0].data = numbers;
+                      lineChart1.data.datasets[0].data = data02;
+                      pieChart1.data.datasets[0].data = data03;
+                      barChart1.update();
+                      lineChart1.update();
+                      pieChart1.update();
+                      disableLoading();
+                    });
+                  });
+                })
+                .catch((err) => {
+                  console.error(err);
+                });
+            }
+
+            teamSelect.addEventListener("change", updateGraphs);
+            teamSelect.addEventListener("change", activeLoading);
+            teamSelect.addEventListener("change", updateMontadores);
+            teamSelect.addEventListener("change", updateProfileLink);
+            montadorSelect.addEventListener("change", updateProfileLink);
+
+            updateGraphs();
+            updateProfileLink();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
+
+      teamsFilter();
+      activeLoading();
+
+      var ctx1 = document.getElementById("barChart1").getContext("2d");
+      var barChart1 = new Chart(ctx1, {
+        type: "bar",
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: "Porcentagem de tarefas feitas",
+              data: [],
+              backgroundColor: "rgba(54, 162, 235, 1)",
+              borderColor: "rgba(54, 162, 235, 1)",
+              borderWidth: 1,
+              borderRadius: 5,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+              },
+            ],
+          },
+        },
+      });
+
+      var ctx2 = document.getElementById("barChart2").getContext("2d");
+      var lineChart1 = new Chart(ctx2, {
+        type: "line",
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: "Número real de tarefas não feitas",
+              data: [],
+              backgroundColor: "rgba(54, 162, 235, 1)",
+              borderColor: "rgba(54, 162, 235, 1)",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+              },
+            ],
+          },
+        },
+      });
+
+      var ctx3 = document.getElementById("pieChart1").getContext("2d");
+      var pieChart1 = new Chart(ctx3, {
+        type: "pie",
+        data: {
+          labels: ["Concluidos em %", "Pendentes em %"],
+          datasets: [
+            {
+              data: [],
+              backgroundColor: ["rgba(54, 162, 235, 1)", "#F5F6F7"],
+              borderColor: ["rgba(54, 162, 235, 1)", "#777777"],
+              borderWidth: 1,
+              borderRadius: 5,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+        },
+      });
+
+      var ctx4 = document.getElementById("pieChart2").getContext("2d");
+      var pieChart2 = new Chart(ctx4, {
+        type: "pie",
+        data: {
+          labels: ["Concluidos em %", "Pendentes em %"],
+          datasets: [
+            {
+              data: [],
+              backgroundColor: ["rgba(54, 162, 235, 1)", "#F5F6F7"],
+              borderColor: ["rgba(54, 162, 235, 1)", "#777777"],
+              borderWidth: 1,
+              borderRadius: 5,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+        },
+      });
+    </script>
+    <style>
+      a {
+        color: #0672cb;
+      }
+    </style>
+  </body>
+</html>

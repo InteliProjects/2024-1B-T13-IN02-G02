@@ -1,0 +1,68 @@
+
+input,
+textarea,
+select {
+    border: 1px solid #8C8D8D!important;
+    border-radius: 4px!important;
+    resize: none;
+}
+
+input,
+select {
+    height: 52px;
+    width: 100%;
+    padding: 0px 10px;
+}
+
+.input-group {
+    position: relative;
+}
+
+.input-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.btn-outline-primary:hover svg g path {
+    fill: #FFF;
+}
+
+.select2-container--default .select2-selection--multiple {
+    overflow-y: auto;
+}
+
+.select2 {
+    height: 50px;
+    width: 100%!important;
+}
+
+.select2-selection {
+    height: 50px!important;
+}
+
+.select2-selection__arrow {
+    display: none;
+}
+
+.select2-selection__rendered {
+    margin-top: 12px;
+}
+
+.select2-selection__clear {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .input-wrapper,
+    .btn-outline-primary {
+        width: 100%;
+    }
+}

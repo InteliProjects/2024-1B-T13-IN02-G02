@@ -1,0 +1,190 @@
+<title>
+    <%- title = "Montadores" %>
+</title>
+
+<%- include('../components/header.ejs'); %>
+
+    <link rel="stylesheet" href="/styles/update-team.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+    <style>
+        #mounters tbody tr td select {
+            width: 100%;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            padding-inline-end: 1rem;
+        }
+        
+        #mounters tbody tr td select option {
+            padding: 5px;
+        }
+        
+        .content-table {
+            width: 100%;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .dt-layout-cell .dt-scroll .dt-scroll-head .dt-scroll-headInner {
+            width: 100% !important;
+        }
+        
+        .display.dataTable {
+            width: 100% !important;
+        }
+        
+        div.dt-container div.dt-layout-cell.dt-end {
+            text-align: left;
+        }
+        
+        div.dt-container div.dt-layout-cell.dt-end input {
+            border: 1px solid #8C8D8D!important;
+            border-radius: 4px!important;
+            resize: none;
+        }
+        
+        #mounters_wrapper.dt-container.dt-empty-footer {
+            width: 100%;
+        }
+        
+        div.dt-container div.dt-layout-cell.dt-end div.dt-search {
+            position: relative;
+        }
+        
+        #dt-search-0 {
+            width: 30%;
+        }
+        
+        div.dt-container div.dt-layout-cell.dt-end div.dt-search input {
+            padding-inline: 36px;
+            border: 2px solid #D2D2D2 !important;
+        }
+        
+        div.dt-container div.dt-layout-cell.dt-end div.dt-search input:focus {
+            border: 2px solid #D2D2D2 !important;
+            outline: none;
+        }
+        
+        div.dt-container div.dt-layout-cell.dt-end div.dt-search::after {
+            content: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="dds__search" clip-path="url(%23clip0_5003_299)"><path id="Vector" d="M24 22.89L16.05 15C17.34 13.4003 18.1208 11.3423 18.1208 9.10202C18.1208 9.06602 18.1208 9.03002 18.12 8.99477V9.00002V8.99927C18.12 4.02902 14.0903 -0.000732422 9.12002 -0.000732422C9.07802 -0.000732422 9.03602 -0.000732422 8.99402 1.75781e-05H9.00002C4.01852 0.0502676 -0.000732422 4.10027 -0.000732422 9.08927C-0.000732422 9.13652 1.75781e-05 9.18452 1.75781e-05 9.23177V9.22427C1.75781e-05 14.1945 4.02977 18.2243 9.00002 18.2243C9.07202 18.2265 9.15677 18.2273 9.24152 18.2273C11.454 18.2273 13.4738 17.4015 15.009 16.041L15 16.0493L22.95 23.9993L24.06 22.8893L24 22.89ZM9.00002 16.695C4.85777 16.695 1.50002 13.3373 1.50002 9.19502C1.50002 9.19052 1.50002 9.18527 1.50002 9.17927C1.50002 5.01902 4.84727 1.64027 8.99552 1.59002H9.00002C13.1423 1.59002 16.5 4.94777 16.5 9.09002C16.4918 13.2503 13.1513 16.6275 9.00602 16.695H9.00002Z" fill="%23A0A0A0"/></g><defs><clipPath id="clip0_5003_299"><rect width="24" height="24" fill="white"/></clipPath></defs></svg>');
+            display: block;
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-40%);
+        }
+    </style>
+    <div style="margin-top: 80px; width: 100%; position: relative;" class="d-flex">
+        <%- include('../components/sidebar-adm.ejs'); %>
+            <div class="w-100" style="padding-inline: 3rem; padding-block: 2rem">
+                <div class="content-table">
+                    <div id="loading" class="spinner-border text-primary" role="status" style="display: none; position: fixed; left: 50%; top: 50%; z-index: 1000;"></div>
+                    <table id="mounters" class="display" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Selecionar equipe</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <script>
+                        function activeLoading() {
+                            const loading = document.getElementById('loading');
+                            loading.style.display = 'block';
+                        }
+
+                        function disableLoading() {
+                            const loading = document.getElementById('loading');
+                            loading.style.display = 'none';
+                        }
+                        async function updateTeamOfMounter(userId) {
+                            const teamId = document.getElementById(`mounter-${userId}`).value;
+                            const token = localStorage.getItem('access_token');
+                            const changeTeamResponse = await fetch('http://localhost:1337/api/updateTeamId', {
+                                method: 'PATCH',
+                                headers: {
+                                    "Authorization": token,
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    userId: Number(userId),
+                                    newTeam: teamId
+                                })
+                            })
+                            if (changeTeamResponse.status === 200 || changeTeamResponse.status === 201) {
+                                alert('Equipe do montador atualizada com sucesso!');
+                            } else {
+                                alert('Erro ao atualizar equipe do montador!');
+                            }
+                        }
+                        activeLoading();
+                        window.onload = async() => {
+                            const response = await fetch('http://localhost:1337/api/mounters', {
+                                method: 'GET',
+                                headers: {
+                                    "Authorization": localStorage.getItem('access_token')
+                                }
+                            });
+                            const data = await response.json();
+                            initializeDataTable(data);
+                            document.getElementById('mounters').style.display = 'inline-table';
+                            disableLoading();
+                            const datable = new DataTable('#mounters', {
+                                searchable: true,
+                                sortable: true,
+                                fixedHeight: true,
+                                scrollY: '50vh',
+                                perPage: 10,
+                                perPageSelect: [5, 10, 20],
+                                "language": {
+                                    "paginate": {
+                                        "first": "Primeira",
+                                        "last": "Última",
+                                        "next": "Próxima",
+                                        "previous": "Anterior"
+                                    },
+                                    "search": "",
+                                    "lengthMenu": "",
+                                    "zeroRecords": "Nenhum registro encontrado",
+                                    "info": "Exibindo itens de _START_ a _END_",
+                                    "infoEmpty": "Nenhum registro disponível",
+                                    "infoFiltered": "(filtrado de _MAX_ registros no total)"
+                                },
+                                autoWidth: false,
+                            });
+                            document.querySelector("div.dt-container div.dt-layout-cell.dt-end div.dt-search input").placeholder = "Pesquisar";
+
+                        }
+
+                        function initializeDataTable(data) {
+                            const {
+                                mounters,
+                                teams
+                            } = data;
+                            const tableRow = mounters.map(mounter => {
+                                        return `
+                    <tr>
+                        <td>${mounter.name}</td>
+                        <td>
+                            <select name="" id="mounter-${mounter.id}" onchange="updateTeamOfMounter(${mounter.id})">
+                                ${teams.map(team => {
+                                    return `<option value="${team.id}" ${mounter.team === team.id ? 'selected="selected"' : null}>${team.name}</option>`
+                                })}
+                            </select>
+                        </td>
+                    </tr>
+                `
+            }).join('');
+            $('#mounters tbody').html(tableRow);
+        }
+                    </script>
+                </div>
+            </div>
+    </div>

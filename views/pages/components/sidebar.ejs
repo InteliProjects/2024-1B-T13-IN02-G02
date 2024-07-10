@@ -1,0 +1,81 @@
+<link rel="stylesheet" href="/styles/sidebar.css" />
+<div class="sidebar" id="sidebar" onmouseenter="(() => {
+    const paragraphInsideLi = document.querySelectorAll('.sidebar a p');
+    document.getElementById('sidebar').classList.add('sidebar-opened');
+    paragraphInsideLi.forEach((p) => {
+        p.classList.remove('hideText');
+    });
+})()" onmouseleave="(() => {
+        const paragraphInsideLi = document.querySelectorAll('.sidebar a p');
+        document.getElementById('sidebar').classList.remove('sidebar-opened');
+        paragraphInsideLi.forEach((p) => {
+            p.classList.add('hideText');
+        });
+    })()">
+    <ul>
+        <a href="/mounter/homepage" style="display: flex; align-items: center; gap: 20px" id="home">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_4429_178)">
+                    <path d="M40 22.35L20 0.924988L0 22.35L1.85 24.1L4.15 21.6V39.1H16.3V25H23.8V39.15H35.925V21.65L38.25 24.15L40.125 22.4L40 22.35ZM33.275 36.525H26.225V22.5H13.725V36.65H6.7V19.15L20 4.64999L33.275 18.875V36.525Z" fill="#6E6E6E"/>
+                    </g>
+                    <defs>
+                    <clipPath id="clip0_4429_178">
+                    <rect width="40" height="40" fill="white"/>
+                    </clipPath>
+                    </defs>
+                </svg>
+            <p class="hideText">Home</p>
+        </a>
+        <a href="/mounter/search" style="display: flex; align-items: center; gap: 20px" id="search">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.2 30.825H2.675V12.5H32.1V14.375C33.1112 14.9975 33.9825 15.7175 34.7425 16.5412L34.75 16.55V2.25H0V33.475H20C18.9087 32.7425 17.9825 31.8637 17.2212 30.8537L17.2 30.825ZM2.675 5H32.1V10H2.675V5ZM34.75 30.625L33.375 29.25C33.9937 28.4125 34.4675 27.4262 34.7375 26.3575L34.75 26.3C34.9087 25.6763 35 24.96 35 24.2225C35 24.1975 35 24.1712 35 24.1462V24.15C34.955 21.5712 33.8287 19.265 32.0575 17.6562L32.05 17.65C30.4962 16.1687 28.3887 15.2575 26.0687 15.2575C21.2775 15.2575 17.3937 19.1412 17.3937 23.9325C17.3937 26.7325 18.7212 29.2237 20.78 30.81L20.8 30.825C22.2762 32.0825 24.205 32.8475 26.3125 32.8475C28.2512 32.8475 30.0387 32.2 31.4712 31.11L31.45 31.125L38.075 37.75L39.95 35.85L34.7 30.625H34.75ZM32.1 25.95C31.3087 28.4325 29.0225 30.2 26.3237 30.2C22.9825 30.2 20.2737 27.4912 20.2737 24.15C20.2737 20.8087 22.9825 18.1 26.3237 18.1C29.0225 18.1 31.3087 19.8675 32.0875 22.3075L32.0987 22.35C32.2887 22.8862 32.3987 23.505 32.3987 24.15C32.3987 24.795 32.2887 25.4137 32.0862 25.9887L32.1 25.95Z" fill="#6E6E6E"/>
+                </svg>
+            <p class="hideText" style="white-space: nowrap;">Buscar manuais</p>
+        </a>
+        <a href="/mounter/favorites" style="display: flex; align-items: center; gap: 20px" id="favorites">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_4429_182)">
+                    <path d="M40 15.5L26.175 13.5L20 0.974976L13.825 13.475L0 15.5L10 25.25L7.65 39.025L20 32.5L32.35 39L30 25.25L40 15.5ZM20 29.475L11.225 34.075L12.9 24.325L5.825 17.5L15.625 16.075L20 7.09998L24.375 15.975L34.175 17.5L27.1 24.3L28.775 34.075L20 29.475Z" fill="#6E6E6E"/>
+                    </g>
+                    <defs>
+                    <clipPath id="clip0_4429_182">
+                    <rect width="40" height="40" fill="white"/>
+                    </clipPath>
+                    </defs>
+                </svg>
+            <p class="hideText">Favoritos</p>
+        </a>
+        <a href="/mounter/support" style="display: flex; align-items: center; gap: 20px" id="support">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_4429_184)">
+                    <path d="M20 1.46478e-05C19.8275 -0.00748535 19.625 -0.0112354 19.4212 -0.0112354C11.1687 -0.0112354 4.45372 6.57751 4.25122 14.7813V25.725H6.17622V26.15C6.17622 29.0913 8.55997 31.475 11.5012 31.475H14.0012V17.5H11.5012C9.55747 17.5113 7.86122 18.5625 6.93997 20.125L6.92622 20.15V14.8C7.12747 8.05376 12.645 2.66126 19.4212 2.66126C19.625 2.66126 19.8287 2.66626 20.03 2.67626L20.0012 2.67501C20.2112 2.66251 20.455 2.65501 20.7025 2.65501C27.4412 2.65501 32.9137 8.07376 33.0012 14.7913V20.15C32.0787 18.5838 30.4162 17.5388 28.5062 17.5H26.0012V31.475H28.5012C30.445 31.4638 32.1412 30.4125 33.0625 28.85L33.0762 28.825V33.1L25.0012 37.325H21.3262V35H18.6762V40H25.7012L35.7012 34.7V14.7C35.5425 6.53876 28.8887 -0.0162354 20.7037 -0.0162354C20.4562 -0.0162354 20.2112 -0.00998535 19.9662 0.00126465L20 1.46478e-05ZM8.84997 22.825C8.84997 22.8238 8.84997 22.8225 8.84997 22.8213C8.84997 21.41 9.95247 20.2575 11.3425 20.1763H11.35V28.8013C9.95247 28.72 8.84997 27.5663 8.84997 26.155C8.84997 26.1538 8.84997 26.1525 8.84997 26.15V22.825ZM31.15 26.15C31.15 26.1513 31.15 26.1525 31.15 26.1538C31.15 27.565 30.0475 28.7175 28.6575 28.7988H28.65V20.1738C30.0475 20.255 31.15 21.4088 31.15 22.82C31.15 22.8213 31.15 22.8225 31.15 22.825V26.15Z" fill="#6E6E6E"/>
+                    </g>
+                    <defs>
+                    <clipPath id="clip0_4429_184">
+                    <rect width="40" height="40" fill="white"/>
+                    </clipPath>
+                    </defs>
+                </svg>
+            <p class="hideText">Suporte</p>
+        </a>
+    </ul>
+    <script>
+        const locationWindow = window.location.href
+        if (locationWindow.includes('homepage')) {
+            document.getElementById('home').classList.add('selected-item')
+        } else if (locationWindow.includes('search')) {
+            document.getElementById('search').classList.add('selected-item')
+        } else if (locationWindow.includes('favorites')) {
+            document.getElementById('favorites').classList.add('selected-item')
+        } else if (locationWindow.includes('support')) {
+            document.getElementById('support').classList.add('selected-item')
+        }
+    </script>
+    <!-- <button class="" onclick="(() => {
+        const paragraphInsideLi = document.querySelectorAll('.sidebar li p');
+        document.getElementById('sidebar').classList.toggle('collapsed-sidebar');
+        paragraphInsideLi.forEach((p) => {
+            p.classList.toggle('hideText');
+        });
+    })()">Abrir</button> -->
+</div>
